@@ -50,9 +50,21 @@
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
 			"cinttypes": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"variant": "cpp",
+			"bit": "cpp",
+			"compare": "cpp",
+			"concepts": "cpp",
+			"functional": "cpp",
+			"iterator": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"numbers": "cpp",
+			"any": "cpp"
 		},
 		"git.autoRepositoryDetection": false,
-		"git.enabled": true
+		"git.enabled": true,
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": false
 	}
 }
