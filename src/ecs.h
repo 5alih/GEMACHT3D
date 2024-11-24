@@ -8,12 +8,22 @@
 #include <bits/stdc++.h>
 #include "raylib.h"
 
-enum componentsEnum{TRANSFORM_COMPONENT};
+//_______________________________________________________________ COMPONENTS ________________________________________________________________
 
-struct TransformComponent {
+enum componentsEnum{TRANSFORM_COMPONENT, HEALTH_COMPONENT, ATTACK_COMPONENT};
+
+struct TransformComponent{
 	Vector2 position;
 	Vector2 velocity;
 };
+
+struct HealthComponent{
+	int healthPoints;
+	int maxHealth;
+	int regeneration;
+};
+
+//___________________________________________________________________________________________________________________________________________
 
 class ECS;
 
@@ -83,22 +93,44 @@ void ECS::RegisterComponentType(int componentTypeId) {
     }
 }
 
+template <typename T>
+std::shared_ptr<T> GetComponent(Entity& entity, int componentTypeId) {
+    for (size_t i = 0; i < entity.component_types.size(); ++i) {
+        if (entity.component_types[i] == componentTypeId) {
+            int componentInstanceId = entity.component_ids[i];
+            auto& componentArray = entity.ecs->componentArrays[componentTypeId];
+            return std::static_pointer_cast<T>(componentArray[componentInstanceId]);
+        }
+    }
+    return nullptr; // Component not found
+}
+
+//_________________________________________________________________ SYSTEMS _________________________________________________________________
+
 class MovementSystem: public System {
 public:
-    void Update(ECS& ecs) override{
-        for (Entity& entity : ecs.entities) {								// Iterate over all entities in the ECS
-            for (size_t i = 0; i < entity.component_types.size(); ++i) {	// Check if the entity has a TransformComponent
-                if (entity.component_types[i] == TRANSFORM_COMPONENT) {  	// Assuming 0 is TransformComponent's type ID
-                    int componentId = entity.component_ids[i];
-					
-					// Retrieve the TransformComponent
-                    auto& componentArray = ecs.componentArrays[0]; 			// TransformComponent array
-                    auto transformComponent = std::static_pointer_cast<TransformComponent>(componentArray[componentId]);
-                    
-                    if (transformComponent) {                    			// Update TransformComponent logic (e.g., move entity based on velocity)
-                        transformComponent->position.x += transformComponent->velocity.x;
-                        transformComponent->position.y += transformComponent->velocity.y;
-                    }
+    void Update(ECS& ecs) override {
+        for (Entity& entity : ecs.entities) {
+            auto transformComponent = GetComponent<TransformComponent>(entity, TRANSFORM_COMPONENT);
+            if (transformComponent) {
+				transformComponent->position.x += transformComponent->velocity.x;
+				transformComponent->position.y += transformComponent->velocity.y;
+            }
+        }
+    }
+};
+
+class HealthSystem: public System {
+public:
+    void Update(ECS& ecs) override {
+        for (Entity& entity : ecs.entities) {
+            auto healthComponent = GetComponent<HealthComponent>(entity, HEALTH_COMPONENT);
+            if (healthComponent) {
+                if (healthComponent->maxHealth > healthComponent->healthPoints) {
+                    healthComponent->healthPoints += healthComponent->regeneration;
+                }
+                if (healthComponent->healthPoints > healthComponent->maxHealth) {
+                    healthComponent->healthPoints = healthComponent->maxHealth;
                 }
             }
         }

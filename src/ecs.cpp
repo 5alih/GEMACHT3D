@@ -42,17 +42,19 @@ void Entity::RemoveComponent(int componentTypeId) {
     }
 }
 
+//_______________________________________________________________ INITIALIZE ________________________________________________________________
+
 void ECS::Initialize() {
     entities.reserve(32);
 
 	this->RegisterComponentType<TransformComponent>(TRANSFORM_COMPONENT); // 0 is the type ID for TransformComponent
+	this->RegisterComponentType<HealthComponent>(HEALTH_COMPONENT);
 
 	this->AddSystem(std::make_shared<MovementSystem>());
-	
-	TransformComponent transform;
-	transform.position = { 0.0f, 0.0f };
-	transform.velocity = { 1.0f, 1.0f };
+	this->AddSystem(std::make_shared<HealthSystem>());
 }
+
+//___________________________________________________________________________________________________________________________________________
 
 Entity ECS::CreateEntity() {
     Entity entity(this);  // Pass a pointer to the current ECS instance
