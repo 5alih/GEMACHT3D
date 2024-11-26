@@ -45,7 +45,9 @@ public:
     Entity(ECS* ecsInstance) : ecs(ecsInstance) {}
 
     template <typename T>
-    int AddComponent(int componentTypeId, T component);
+    int AddComponent(int componentTypeId, const T &component);
+	template <typename T>
+    bool SetComponent(int componentTypeId, const T& newComponentData);
 	void RemoveComponent(int componentTypeId);
 };
 
@@ -73,7 +75,7 @@ public:
 };
 
 template <typename T>
-int Entity::AddComponent(int componentTypeId, T component) {
+int Entity::AddComponent(int componentTypeId, const T& component) {
     if (ecs->componentArrays.find(componentTypeId) != ecs->componentArrays.end()) {
         auto& componentArray = ecs->componentArrays[componentTypeId];
         int componentId = componentArray.size();
@@ -83,6 +85,23 @@ int Entity::AddComponent(int componentTypeId, T component) {
         return componentId;
     }
     return -1; // Error if component type not found
+}
+
+// Set or update the data of a component for an entity
+template <typename T>
+bool Entity::SetComponent(int componentTypeId, const T& newComponentData) {
+    for (size_t i = 0; i < component_types.size(); ++i) {
+        if (component_types[i] == componentTypeId) {
+            int componentInstanceId = component_ids[i];
+            auto& componentArray = ecs->componentArrays[componentTypeId];
+            auto componentPtr = std::static_pointer_cast<T>(componentArray[componentInstanceId]);
+            if (componentPtr) {
+                *componentPtr = newComponentData;
+                return true;  // Successfully updated the component
+            }
+        }
+    }
+    return false;  // Component not found or update failed
 }
 
 // Register a component type by ID
