@@ -9,7 +9,6 @@ void CoreEngine::Initialize() {
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	MaximizeWindow();
 	SetTargetFPS(0);
-	ECS ecs;
 	ecs.Initialize();
 
 	playerCamera.position= {0.0f, 2.0f, 4.0f};
@@ -27,7 +26,17 @@ void CoreEngine::Run() {
 		input.HandleInput();
 		ecs.Update();
 		UpdateCamera(&playerCamera, CAMERA_FIRST_PERSON);
+
+		/* if(IsKeyPressed(KEY_P)){
+			developerConsole.CreateEntity_exec();
+		} */
+
+		BeginDrawing();
+    	ClearBackground(DARKBLUE);
 		renderer.RenderPlayerView(playerCamera);
+		DrawFPS(5, 5);
+		developerConsole.log();
+		EndDrawing();
 	}
 }
 

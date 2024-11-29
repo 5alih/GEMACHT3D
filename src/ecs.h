@@ -10,7 +10,7 @@
 
 //_______________________________________________________________ COMPONENTS ________________________________________________________________
 
-enum componentsEnum{TRANSFORM_COMPONENT, HEALTH_COMPONENT, ATTACK_COMPONENT};
+enum componentsEnum{TRANSFORM_COMPONENT, HEALTH_COMPONENT};
 
 struct TransformComponent{
 	Vector2 position;
@@ -26,8 +26,6 @@ struct HealthComponent{
 //___________________________________________________________________________________________________________________________________________
 
 class ECS;
-
-using ComponentVariant = std::variant<TransformComponent>;
 
 class Entity {
 public:
