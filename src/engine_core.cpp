@@ -7,9 +7,11 @@ float deltaTime= GetFrameTime();
 void CoreEngine::Initialize() {
 	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "pine Engine");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
+	SetExitKey(KEY_NULL);
 	MaximizeWindow();
-	SetTargetFPS(0);
+	SetTargetFPS(144);
 	ecs.Initialize();
+	developerConsole.Initialize();
 
 	playerCamera.position= {0.0f, 2.0f, 4.0f};
 	playerCamera.target= {0.0f, 2.0f, 0.0f};
@@ -22,20 +24,21 @@ void CoreEngine::Initialize() {
 
 // Main game loop
 void CoreEngine::Run() {
-	while (!WindowShouldClose()) {
+	while(!WindowShouldClose()){
 		input.HandleInput();
 		ecs.Update();
-		UpdateCamera(&playerCamera, CAMERA_FIRST_PERSON);
 
-		/* if(IsKeyPressed(KEY_P)){
-			developerConsole.CreateEntity_exec();
-		} */
+		developerConsole.UpdateConsole();
+		if(developerConsole.isEnabled== false){
+			UpdateCamera(&playerCamera, CAMERA_FIRST_PERSON);
+		}
 
 		BeginDrawing();
-    	ClearBackground(DARKBLUE);
+    	ClearBackground(BLACK);
 		renderer.RenderPlayerView(playerCamera);
-		DrawFPS(5, 5);
-		developerConsole.log();
+		renderer.RenderFPS(WHITE);
+		developerConsole.RenderLog();
+
 		EndDrawing();
 	}
 }
