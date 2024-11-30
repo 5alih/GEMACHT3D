@@ -63,13 +63,14 @@ Entity ECS::CreateEntity() {
     return entity;
 }
 
-void ECS::DeleteEntity(int id) {
+bool ECS::DeleteEntity(int id) {
     for (size_t i = 0; i < entities.size(); i++) {
         if (entities[i].GetId() == id) {
             entities.erase(entities.begin() + i);
-            return;
+            return true;
         }
     }
+	return false;
 }
 
 void ECS::Update() {

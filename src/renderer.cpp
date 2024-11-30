@@ -1,6 +1,4 @@
 #include "renderer.h"
-#include "ecs.h"
-#include "raylib.h"
 
 void Renderer::Render(){
     BeginDrawing();
@@ -14,6 +12,10 @@ void Renderer::RenderPlayerView(Camera3D playerCamera){
 	Vector2 TestPlaneSize= {20, 20};
 
 	BeginMode3D(playerCamera);
-		DrawPlane(WorldCenter, TestPlaneSize, YELLOW);
+		DrawPlane(WorldCenter, TestPlaneSize, DARKPURPLE);
 	EndMode3D();
+}
+
+void Renderer::RenderFPS(Color color){
+	DrawText(to_const_char(to_string(GetFPS())), GetMonitorWidth(0) -20, 5, 10, color);
 }

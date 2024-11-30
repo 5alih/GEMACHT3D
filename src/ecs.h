@@ -63,7 +63,7 @@ public:
 
 	void Initialize();
 	Entity CreateEntity();
-	void DeleteEntity(int id);
+	bool DeleteEntity(int id);
 	void Update();
 	void Shutdown();
 
