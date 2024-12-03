@@ -1,12 +1,14 @@
 #include "console.h"
 
+	//TO DO: add script executer (list of console commands to test scenerios)
+
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
-	input= "test input text";
 	possibleCommands= {};
 	possibleCommandIndex= 0;
-	logs.push_back("test text");
+	logs.push_back("Developer Console Started");
 	consoleFont= LoadFontEx("resource/font/MinecraftRegular-Bmg3.otf", 12, 0, 0);
+	scrollAmounth= 0;
 
 	//________________________________________________________________ COMMANDS _________________________________________________________________
 
@@ -39,6 +41,23 @@ void DeveloperConsole::UpdateConsole(){
 		}
 		else{
 			isReady= false;
+		}
+
+		if(IsKeyDown(KEY_LEFT_CONTROL)){
+			if(IsKeyDown(KEY_KP_9)){
+				scrollAmounth++;
+			}
+			if(IsKeyDown(KEY_KP_3) && scrollAmounth> 0){
+				scrollAmounth--;
+			}
+		}
+		else{
+			if(IsKeyPressed(KEY_KP_9)){
+				scrollAmounth++;
+			}
+			if(IsKeyPressed(KEY_KP_3) && scrollAmounth> 0){
+				scrollAmounth--;
+			}
 		}
 	}
 }
@@ -110,21 +129,31 @@ const char *to_const_char(std::string str){
 	return text;
 }
 
-void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, std::string str){
+void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, int &scroll_length, std::string str){
 	int start= 0, i= 0;
 	int padding= size + (size/5);
 	std::string temp;
 	if(length<= (int)list.size())
 		start= (int)list.size() -length;
-	for(i= start; i< (int)list.size(); i++){
+	int scroll= 0;
+	if((int)list.size()== (length + scroll_length)){
+		scroll_length= scroll_length -1;
+	}
+	if((int)list.size()> (length + scroll_length)){
+		scroll= scroll_length;
+		start= (int)list.size() -length -scroll_length;
+	}
+	for(i= start; i< (int)list.size() - scroll; i++){
 		temp= list[i];
 		if(temp.find("[!]")!= std::string::npos){
 			DrawTextEx(consoleFont, "/!\\", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, YELLOW);
-			temp.replace(0, 3, 3, ' ');
+			if(temp.size()> 3)
+				temp.replace(0, 3, 3, ' ');
 		}
 		else if(temp.find("[X]")!= std::string::npos){
-			DrawTextEx(consoleFont, "[X]", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, RED);
-			temp.replace(0, 3, 3, ' ');
+			DrawTextEx(consoleFont, "(X)", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, RED);
+			if(temp.size()> 3)
+				temp.replace(0, 3, 3, ' ');
 		}
 		DrawTextEx(consoleFont, to_const_char(temp), (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, listColor);
 	}
@@ -133,14 +162,15 @@ void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size
 
 void DeveloperConsole::RenderLog(){
 	int fontSize= 12;
+	int zero= 0;
 	Color TEAL= (Color){0, 200, 170, 255};
 	if(isEnabled== true){
-		log(logs, 5, 5, fontSize, WHITE, TEAL, 20, input);
+		log(logs, 5, 5, fontSize, WHITE, TEAL, 20, scrollAmounth, input);
 		if((int)possibleCommands.size()> 0){
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, possibleCommands[possibleCommandIndex]);
+			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, zero, possibleCommands[possibleCommandIndex]);
 		}
 		else{
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, "");
+			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, zero, "");
 		}
 	}
 }

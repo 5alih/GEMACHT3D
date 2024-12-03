@@ -20,6 +20,7 @@ public:
 	std::vector<std::string> possibleCommands;
 	std::vector<std::function<void()>> executers;
 	int possibleCommandIndex;
+	int scrollAmounth;
 	ECS ecs;
 	std::vector<std::string> logs;
 
@@ -33,7 +34,7 @@ public:
 	std::vector<std::string> GetPossibleCommands();
 	void ExecuteCommand(int commandId);
 
-	void log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, std::string str);
+	void log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, int &scroll_length, std::string str);
 	void RenderLog();
 
 	//executers
