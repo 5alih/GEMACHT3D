@@ -1,9 +1,17 @@
+echo this is a test script
+echo all the commands are tested
+echo DEVELOPER CONSOLE
+echo is actualy a great thing
+echo and i am glad i did it
 createEntity
 createEntity
 createEntity
-listEntities
-deleteEntity 2
-deleteEntity 2
-deleteEntity2
-deleteEntity iki
+createEntity
+createEntity
+createEntity
+echo created 6 entities
+deleteEntity 3
+deleteEntity 3
+deleteEntity3
+deleteEntity dwa
 listEntities

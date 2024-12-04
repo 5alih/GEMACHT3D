@@ -45,6 +45,7 @@ public:
 	void DeleteEntity_exec();
 	void ListEntities_exec();
 	void RunScript_exec();
+	void Echo_exec();
 };
 
 const char *to_const_char(std::string str);
@@ -53,5 +54,6 @@ bool is_number(const std::string& s);
 
 std::vector<std::string> split_string(const std::string str, const char ch);
 std::string cat_string(std::vector<std::string> parts, char ch);
+std::string cat_2string(std::string s1, std::string s2);
 
 #endif // CONSOLE_H
