@@ -1,0 +1,9 @@
+createEntity
+createEntity
+createEntity
+listEntities
+deleteEntity 2
+deleteEntity 2
+deleteEntity2
+deleteEntity iki
+listEntities
