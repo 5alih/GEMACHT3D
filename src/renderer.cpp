@@ -12,7 +12,7 @@ void Renderer::RenderPlayerView(Camera3D playerCamera){
 	Vector2 TestPlaneSize= {20, 20};
 
 	BeginMode3D(playerCamera);
-		DrawPlane(WorldCenter, TestPlaneSize, DARKPURPLE);
+		DrawPlane(WorldCenter, TestPlaneSize, BLACK);
 	EndMode3D();
 }
 

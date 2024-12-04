@@ -7,6 +7,7 @@
 #include <sstream>
 #include <functional>
 #include <bits/stdc++.h>
+#include <fstream>
 #include "raylib.h"
 #include "ecs.h"
 
@@ -43,6 +44,7 @@ public:
 	void CreateEntity_exec();
 	void DeleteEntity_exec();
 	void ListEntities_exec();
+	void RunScript_exec();
 };
 
 const char *to_const_char(std::string str);
@@ -50,6 +52,6 @@ std::string to_string(int value);
 bool is_number(const std::string& s);
 
 std::vector<std::string> split_string(const std::string str, const char ch);
-std::string cat_string(std::vector<std::string> parts);
+std::string cat_string(std::vector<std::string> parts, char ch);
 
 #endif // CONSOLE_H

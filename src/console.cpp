@@ -1,7 +1,5 @@
 #include "console.h"
 
-	//TO DO: add script executer (list of console commands to test scenerios)
-
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
 	possibleCommands= {};
@@ -18,6 +16,7 @@ void DeveloperConsole::Initialize(){
 	"createEntity",
 	"deleteEntity",
 	"listEntities",
+	"run",
 	};
 	
 	executers.push_back([this](){ Clear_exec(); });
@@ -25,8 +24,7 @@ void DeveloperConsole::Initialize(){
 	executers.push_back([this](){ CreateEntity_exec(); });
 	executers.push_back([this](){ DeleteEntity_exec(); });
 	executers.push_back([this](){ ListEntities_exec(); });
-	
-	//___________________________________________________________________________________________________________________________________________
+	executers.push_back([this](){ RunScript_exec(); });
 }
 
 void DeveloperConsole::UpdateConsole(){
@@ -84,7 +82,7 @@ void DeveloperConsole::GetInputString(){
 		if(IsKeyDown(KEY_LEFT_CONTROL)){
 			std::vector<std::string> parts=  split_string(input, ' ');
 			parts.erase(parts.begin() + ((int)parts.size() - 1));
-			input= cat_string(parts);
+			input= cat_string(parts, ' ');
 			return;
 		}
 		input.pop_back();
@@ -145,6 +143,9 @@ void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size
 	}
 	for(i= start; i< (int)list.size() - scroll; i++){
 		temp= list[i];
+
+		//________________________________________________________ COLORED SYMBOLS _________________________________________________________
+
 		if(temp.find("[!]")!= std::string::npos){
 			DrawTextEx(consoleFont, "/!\\", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, YELLOW);
 			if(temp.size()> 3)
@@ -191,11 +192,12 @@ std::vector<std::string> split_string(const std::string str, const char ch){
 	return parts;
 }
 
-std::string cat_string(std::vector<std::string> parts){
+std::string cat_string(std::vector<std::string> parts, char ch){
 	std::ostringstream stream;
 	for(std::string str : parts){
 		stream << str;
-		stream << ' ';
+		if(ch!= '\0')
+			stream << ch;
 	}
 	return stream.str();
 }
@@ -206,20 +208,20 @@ bool is_number(const std::string& s){
 
 //_______________________________________________________________ EXECUTERS ________________________________________________________________
 
-void DeveloperConsole::Clear_exec(){	// "Clear"
+void DeveloperConsole::Clear_exec(){			// "Clear"
 	logs.clear();
 }
 
-void DeveloperConsole::Quit_exec(){	// "Quit"
+void DeveloperConsole::Quit_exec(){				// "Quit"
 	exit(EXIT_SUCCESS);
 }
 
-void DeveloperConsole::CreateEntity_exec(){	// "CreateEntity"
+void DeveloperConsole::CreateEntity_exec(){		// "CreateEntity"
 	Entity entity= ecs.CreateEntity();
 	logs.push_back("Created entity with id: " + to_string(entity.GetId()));
 }
 
-void DeveloperConsole::DeleteEntity_exec(){	// "DeleteEntity i"
+void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 	std::vector<std::string> parts= split_string(input, ' ');
 	if((int)parts.size()< 2){
 		logs.push_back("[!] Expected format: \"DeleteEntity int\"");
@@ -238,9 +240,30 @@ void DeveloperConsole::DeleteEntity_exec(){	// "DeleteEntity i"
 	}
 }
 
-void DeveloperConsole::ListEntities_exec(){	// "ListEntities"
+void DeveloperConsole::ListEntities_exec(){		// "ListEntities"
 	logs.push_back("List of entities: ");
 	for(int i= 0; i< (int)ecs.entities.size(); i++){
 		logs.push_back(to_string(ecs.entities[i].GetId()));
 	}
+}
+
+void DeveloperConsole::RunScript_exec(){		// "Run (filename)"
+	std::vector<std::string> parts= split_string(input, ' ');
+	if((int)parts.size()< 2)
+		return;
+	parts[0]= "resource/script/";
+	parts.push_back(".txt");
+	std::string filepath= cat_string(parts, '\0');
+	
+	std::ifstream fin(filepath);
+
+	std::cout<< filepath<< std::endl;
+
+	std::string line;
+	while(getline(fin, line)){
+		isReady= true;
+		input= line;
+		GetPossibleCommands();
+	}
+	fin.close();
 }
