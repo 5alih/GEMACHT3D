@@ -1,5 +1,10 @@
 #include "console.h"
 
+	//TO DO: add alias variable declaring with scripts
+	//			alias number 1453
+	//			alias fraction 12.25
+	//			alias string "Hello World" 
+
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
 	possibleCommands= {};
@@ -11,20 +16,22 @@ void DeveloperConsole::Initialize(){
 	//________________________________________________________________ COMMANDS _________________________________________________________________
 
 	allCommands= {
+	"echo",
+	"run",
 	"clear",
 	"quit",
 	"createEntity",
 	"deleteEntity",
-	"listEntities",
-	"run",
+	"listEntities"
 	};
 	
+	executers.push_back([this](){ Echo_exec(); });
+	executers.push_back([this](){ RunScript_exec(); });
 	executers.push_back([this](){ Clear_exec(); });
 	executers.push_back([this](){ Quit_exec(); });
 	executers.push_back([this](){ CreateEntity_exec(); });
 	executers.push_back([this](){ DeleteEntity_exec(); });
 	executers.push_back([this](){ ListEntities_exec(); });
-	executers.push_back([this](){ RunScript_exec(); });
 }
 
 void DeveloperConsole::UpdateConsole(){
@@ -112,6 +119,7 @@ std::vector<std::string> DeveloperConsole::GetPossibleCommands() {
 			ExecuteCommand(i);
 			input.clear();
 			isReady = false;
+			scrollAmounth= 0;
 			break;
 		}
 	}
@@ -155,6 +163,17 @@ void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size
 			DrawTextEx(consoleFont, "(X)", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, RED);
 			if(temp.size()> 3)
 				temp.replace(0, 3, 3, ' ');
+		}
+		else if(temp.find("[$]")!= std::string::npos){
+			DrawTextEx(consoleFont, "<$>", (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, PURPLE);
+			if(temp.size()> 3)
+				temp.replace(0, 3, 3, ' ');
+		}
+		else if(temp.find("[@]")!= std::string::npos){
+			if(temp.size()> 3)
+				temp.replace(0, 3, 1, '@');
+			DrawTextEx(consoleFont, to_const_char(temp), (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, GRAY);
+			temp.clear();
 		}
 		DrawTextEx(consoleFont, to_const_char(temp), (Vector2){(float)x, (float)(y + ((i -start)*padding))}, size, 2.0f, listColor);
 	}
@@ -202,11 +221,49 @@ std::string cat_string(std::vector<std::string> parts, char ch){
 	return stream.str();
 }
 
+std::string cat_2string(std::string s1, std::string s2){
+	std::ostringstream stream;
+	stream<< s1 << s2;
+	return stream.str();
+}
+
 bool is_number(const std::string& s){
     return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
 //_______________________________________________________________ EXECUTERS ________________________________________________________________
+
+void DeveloperConsole::Echo_exec(){
+	std::vector<std::string> parts= split_string(input, ' ');
+	std::vector<std::string> result;
+	result.push_back("[@]");
+	for(int i= 1; i< (int)parts.size(); i++){
+		result.push_back(parts[i]);
+	}
+	logs.push_back(cat_string(result, ' '));
+}
+
+void DeveloperConsole::RunScript_exec(){		// "Run (filename)"
+	std::vector<std::string> parts= split_string(input, ' ');
+	std::vector<std::string> response;
+	if((int)parts.size()< 2)
+		return;
+	response.push_back("[$] Executing script:");
+	response.push_back(parts[1]);
+	logs.push_back(cat_string(response, ' '));
+	parts[0]= "resource/script/";
+	parts.push_back(".txt");
+	std::string filepath= cat_string(parts, '\0');
+	std::ifstream fin(filepath);
+
+	std::string line;
+	while(getline(fin, line)){
+		isReady= true;
+		input= line;
+		GetPossibleCommands();
+	}
+	fin.close();
+}
 
 void DeveloperConsole::Clear_exec(){			// "Clear"
 	logs.clear();
@@ -245,25 +302,4 @@ void DeveloperConsole::ListEntities_exec(){		// "ListEntities"
 	for(int i= 0; i< (int)ecs.entities.size(); i++){
 		logs.push_back(to_string(ecs.entities[i].GetId()));
 	}
-}
-
-void DeveloperConsole::RunScript_exec(){		// "Run (filename)"
-	std::vector<std::string> parts= split_string(input, ' ');
-	if((int)parts.size()< 2)
-		return;
-	parts[0]= "resource/script/";
-	parts.push_back(".txt");
-	std::string filepath= cat_string(parts, '\0');
-	
-	std::ifstream fin(filepath);
-
-	std::cout<< filepath<< std::endl;
-
-	std::string line;
-	while(getline(fin, line)){
-		isReady= true;
-		input= line;
-		GetPossibleCommands();
-	}
-	fin.close();
 }
