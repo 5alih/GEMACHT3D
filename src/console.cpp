@@ -3,7 +3,7 @@
 	//TO DO: add alias variable declaring with scripts
 	//			alias number 1453
 	//			alias fraction 12.25
-	//			alias string "Hello World" 
+	//			alias text "Hello World" 
 
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
@@ -32,6 +32,7 @@ void DeveloperConsole::Initialize(){
 	executers.push_back([this](){ CreateEntity_exec(); });
 	executers.push_back([this](){ DeleteEntity_exec(); });
 	executers.push_back([this](){ ListEntities_exec(); });
+	//___________________________________________________________________________________________________________________________________________
 }
 
 void DeveloperConsole::UpdateConsole(){
@@ -187,10 +188,10 @@ void DeveloperConsole::RenderLog(){
 	if(isEnabled== true){
 		log(logs, 5, 5, fontSize, WHITE, TEAL, 20, scrollAmounth, input);
 		if((int)possibleCommands.size()> 0){
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, zero, possibleCommands[possibleCommandIndex]);
+			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 70, zero, possibleCommands[possibleCommandIndex]);
 		}
 		else{
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 100, zero, "");
+			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
 		}
 	}
 }
@@ -233,7 +234,7 @@ bool is_number(const std::string& s){
 
 //_______________________________________________________________ EXECUTERS ________________________________________________________________
 
-void DeveloperConsole::Echo_exec(){
+void DeveloperConsole::Echo_exec(){				//	"Echo (message)"
 	std::vector<std::string> parts= split_string(input, ' ');
 	std::vector<std::string> result;
 	result.push_back("[@]");
