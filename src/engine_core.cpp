@@ -1,5 +1,4 @@
 #include "engine_core.h"
-#include <iostream>
 
 Camera3D playerCamera= {0};
 float deltaTime= GetFrameTime();
@@ -11,6 +10,7 @@ void CoreEngine::Initialize() {
 	MaximizeWindow();
 	SetTargetFPS(144);
 	ecs.Initialize();
+	resourceManager.Initialize();
 	developerConsole.Initialize();
 
 	playerCamera.position= {0.0f, 2.0f, 4.0f};

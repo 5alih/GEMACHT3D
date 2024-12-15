@@ -1,7 +1,8 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
-#include "raylib.h"
+#include "my_functions.h"
+#include "resource.h"
 #include "ecs.h"
 #include "console.h"
 #include "renderer.h"
@@ -9,10 +10,11 @@
 
 class CoreEngine {
 public:
-	Input input;
 	ECS ecs;
-	Renderer renderer;
+	ResourceManager resourceManager;
 	DeveloperConsole developerConsole;
+	Renderer renderer;
+	Input input;
 
 	void Initialize();
 	void Run();

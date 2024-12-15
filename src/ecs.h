@@ -1,12 +1,7 @@
 #ifndef ECS_H
 #define ECS_H
 
-#include <vector>
-#include <memory>
-#include <unordered_map>
-#include <variant>
-#include <bits/stdc++.h>
-#include "raylib.h"
+#include "my_functions.h"
 
 //_______________________________________________________________ COMPONENTS ________________________________________________________________
 

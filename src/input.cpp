@@ -1,5 +1,4 @@
 #include "input.h"
-#include "raylib.h"
 
 void Input::HandleInput() {
     if (IsKeyDown(KEY_W)) { /* Move forward */ }

@@ -131,11 +131,6 @@ void DeveloperConsole::ExecuteCommand(int commandId){
 	executers[commandId]();
 }
 
-const char *to_const_char(std::string str){
-	const char *text= str.c_str();
-	return text;
-}
-
 void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, int &scroll_length, std::string str){
 	int start= 0, i= 0;
 	int padding= size + (size/5);
@@ -194,42 +189,6 @@ void DeveloperConsole::RenderLog(){
 			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
 		}
 	}
-}
-
-std::string to_string(int value){
-	std::ostringstream stream;
-	stream << value;
-	return stream.str();
-}
-
-std::vector<std::string> split_string(const std::string str, const char ch){
-	std::stringstream stream(str);
-	std::vector<std::string> parts;
-	std::string s;
-	while(std::getline(stream, s, ch)){
-		parts.push_back(s);
-	}
-	return parts;
-}
-
-std::string cat_string(std::vector<std::string> parts, char ch){
-	std::ostringstream stream;
-	for(std::string str : parts){
-		stream << str;
-		if(ch!= '\0')
-			stream << ch;
-	}
-	return stream.str();
-}
-
-std::string cat_2string(std::string s1, std::string s2){
-	std::ostringstream stream;
-	stream<< s1 << s2;
-	return stream.str();
-}
-
-bool is_number(const std::string& s){
-    return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
 //_______________________________________________________________ EXECUTERS ________________________________________________________________
