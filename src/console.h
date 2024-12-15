@@ -1,14 +1,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <functional>
-#include <bits/stdc++.h>
-#include <fstream>
-#include "raylib.h"
+#include "my_functions.h"
 #include "ecs.h"
 
 class DeveloperConsole{
@@ -47,13 +40,5 @@ public:
 	void RunScript_exec();
 	void Echo_exec();
 };
-
-const char *to_const_char(std::string str);
-std::string to_string(int value);
-bool is_number(const std::string& s);
-
-std::vector<std::string> split_string(const std::string str, const char ch);
-std::string cat_string(std::vector<std::string> parts, char ch);
-std::string cat_2string(std::string s1, std::string s2);
 
 #endif // CONSOLE_H
