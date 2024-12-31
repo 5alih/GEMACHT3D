@@ -10,7 +10,7 @@ void DeveloperConsole::Initialize(){
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");
-	consoleFont= LoadFontEx("resource/font/MinecraftRegular-Bmg3.otf", 12, 0, 0);
+	consoleFont= LoadFontEx("resource/font/JetBrainsMono-Regular.ttf", 12, 0, 0);
 	scrollAmounth= 0;
 
 	//________________________________________________________________ COMMANDS _________________________________________________________________
@@ -81,7 +81,7 @@ void DeveloperConsole::OnOff(){
 }
 
 bool DeveloperConsole::GetIsEnabled(){
-	return isEnabled;
+	return isEnabled;	
 }
 
 void DeveloperConsole::GetInputString(){
@@ -177,7 +177,7 @@ void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size
 }
 
 void DeveloperConsole::RenderLog(){
-	int fontSize= 12;
+	int fontSize=12;
 	int zero= 0;
 	Color TEAL= (Color){0, 200, 170, 255};
 	if(isEnabled== true){
