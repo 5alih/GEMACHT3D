@@ -1,6 +1,6 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
-
+/*
 #include "my_functions.h"
 
 class Resource{
@@ -62,5 +62,6 @@ public:
         std::cout << "Loading Model: " << filepath << std::endl;		 // Simulate loading a model
     }
 };
+*/
 
 #endif // RESOURCE_H

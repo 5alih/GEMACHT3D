@@ -5,12 +5,14 @@
 	//			alias fraction 12.25
 	//			alias text "Hello World" 
 
+#define FONT_SIZE 12
+
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");
-	consoleFont= LoadFontEx("resource/font/JetBrainsMono-Regular.ttf", 12, 0, 0);
+	consoleFont= LoadFontEx("resource/font/JetBrainsMono-Regular.ttf", FONT_SIZE, 0, 0);
 	scrollAmounth= 0;
 
 	//________________________________________________________________ COMMANDS _________________________________________________________________
@@ -177,7 +179,7 @@ void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size
 }
 
 void DeveloperConsole::RenderLog(){
-	int fontSize=12;
+	int fontSize= FONT_SIZE;
 	int zero= 0;
 	Color TEAL= (Color){0, 200, 170, 255};
 	if(isEnabled== true){
