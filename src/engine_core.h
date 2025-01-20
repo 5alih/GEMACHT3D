@@ -2,7 +2,6 @@
 #define ENGINE_CORE_H
 
 #include "my_functions.h"
-#include "resource.h"
 #include "ecs.h"
 #include "console.h"
 #include "renderer.h"
@@ -11,7 +10,6 @@
 class CoreEngine {
 public:
 	ECS ecs;
-	ResourceManager resourceManager;
 	DeveloperConsole developerConsole;
 	Renderer renderer;
 	Input input;
