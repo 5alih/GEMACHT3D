@@ -7,7 +7,6 @@
 
 class Renderer {
 public:
-    void Render();
 	void RenderPlayerView(Camera3D playerCamera);
 	void RenderFPS(Color color);
 };

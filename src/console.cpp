@@ -5,7 +5,7 @@
 	//			alias fraction 12.25
 	//			alias text "Hello World" 
 
-#define FONT_SIZE 12
+#define FONT_SIZE 15
 
 void DeveloperConsole::Initialize(){
 	isEnabled= true;

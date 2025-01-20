@@ -10,7 +10,7 @@ void CoreEngine::Initialize() {
 	MaximizeWindow();
 	SetTargetFPS(144);
 	ecs.Initialize();
-	resourceManager.Initialize();
+	//resourceManager.Initialize();
 	developerConsole.Initialize();
 
 	playerCamera.position= {0.0f, 2.0f, 4.0f};
