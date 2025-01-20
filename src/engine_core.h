@@ -7,12 +7,15 @@
 #include "renderer.h"
 #include "input.h"
 
-class CoreEngine {
+class CoreEngine{
 public:
 	ECS ecs;
 	DeveloperConsole developerConsole;
 	Renderer renderer;
 	Input input;
+
+	Font engine_font;
+	SwanGui swanGui;
 
 	void Initialize();
 	void Run();
