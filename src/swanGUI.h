@@ -74,6 +74,7 @@ class ThumnailGif;
 class Billboard;
 class BillboardGif;
 class CameraView3D;
+class CameraView3DFill;
 class ColorPicker;
 
 inline std::string b2s(bool value){
@@ -565,13 +566,71 @@ public:
 		DrawTextureRec(m_render_texture.texture, sourceRec, m_position, WHITE);
 	}
 
-	Camera3D& GetCamera() {
+	Camera3D& GetCamera(){
 		return m_camera;
 	}
 
-	RenderTexture& GetRenderTexture() {
+	RenderTexture& GetRenderTexture(){
 		return m_render_texture;
 	}
+};
+
+class CameraView3DFill : public GuiElement{
+public:
+    Camera3D m_camera;
+    RenderTexture m_render_texture;
+    std::function<void(Camera3D&)> m_draw_scene_function;
+    bool m_update_camera = false;
+    bool m_is_calculated = false;
+
+    CameraView3DFill(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function) {
+        m_camera= camera;
+        m_draw_scene_function= draw_scene_function;
+    }
+
+    ~CameraView3DFill(){
+        UnloadRenderTexture(m_render_texture);
+    }
+
+    void Update() override{
+        if(m_is_calculated== false){
+            m_render_texture= LoadRenderTexture(m_size.x, m_size.y);  // Use both dimensions
+            m_is_calculated= true;
+        }
+
+        if(IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            m_update_camera= true;
+            DisableCursor();
+        }
+        else if(m_update_camera && ((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE))){
+            m_update_camera= false;
+            EnableCursor();
+        }
+
+        if (m_update_camera){
+            UpdateCamera(&m_camera, CAMERA_CUSTOM);
+        }
+    }
+
+    void Draw() override{
+        BeginTextureMode(m_render_texture);
+            ClearBackground(ui_panel_header);
+            BeginMode3D(m_camera);
+                if (m_draw_scene_function) m_draw_scene_function(m_camera);
+            EndMode3D();
+        EndTextureMode();
+
+        Rectangle sourceRec = {0.0f, 0.0f, (float)m_render_texture.texture.width, (float)-m_render_texture.texture.height};
+        DrawTextureRec(m_render_texture.texture, sourceRec, m_position, WHITE);
+    }
+
+    Camera3D& GetCamera(){
+        return m_camera;
+    }
+
+    RenderTexture& GetRenderTexture(){
+        return m_render_texture;
+    }
 };
 
 class ColorPicker: public GuiElement{
@@ -842,6 +901,9 @@ public:
 		else if constexpr (std::is_same<T, Billboard>::value || std::is_same<T, BillboardGif>::value || std::is_same<T, CameraView3D>::value){
 			newSize.y= newSize.x;
 		}
+	    else if constexpr (std::is_same<T, CameraView3DFill>::value){
+        	newSize.y= m_size.y -(newPosition.y -m_position.y) -element_padding;
+    	}
 		else if(std::is_same<T, ColorPicker>::value){
 			newSize.y= (font_size + element_padding) *5;
 		}

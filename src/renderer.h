@@ -10,7 +10,7 @@ class Renderer {
 public:
 	void RenderPlayerView(Camera3D playerCamera);
 	void RenderFPS(Color color);
-	SwanGui InitGui(Font font);
+	SwanGui InitGui(Font font, Camera3D& playerCamera);
 	void RenderGui(SwanGui &swanGui);
 };
 
