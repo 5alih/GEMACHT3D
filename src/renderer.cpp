@@ -13,7 +13,7 @@ void Renderer::RenderFPS(Color color){
 	DrawText(to_const_char(to_string(GetFPS())), GetMonitorWidth(0) -20, 5, 10, color);
 }
 
-SwanGui Renderer::InitGui(Font font){
+SwanGui Renderer::InitGui(Font font, Camera3D& playerCamera){
 	SwanGui swanGui;
 
 	Vector2 p_settingsPos= {64, 20};
@@ -39,11 +39,26 @@ SwanGui Renderer::InitGui(Font font){
 	auto p_bottom= std::make_shared<Panel>("CONTENT MANAGER", p_bottomPos, p_bottomSize, font);
 	swanGui.AddPanel(p_bottom);
 
-	Vector2 p_viewportPos= {0, 0};
-	Vector2 p_viewportSize= {64, 36};
-	auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, font);
-	//p_viewport->addElement(std::make_shared<CameraView3D>(camera, draw_scene_function));
-	swanGui.AddPanel(p_viewport);
+    Vector2 p_viewportPos= {0, 0};
+    Vector2 p_viewportSize= {64, 36};
+    auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, font);
+    
+    auto drawSceneFunc = [](Camera3D& cam) {
+        Vector3 WorldCenter = {0.0f, 0.0f, 0.0f};
+        Vector2 TestPlaneSize = {20, 20};
+        DrawPlane(WorldCenter, TestPlaneSize, GOLD);
+    };
+    
+    Camera3D camera = { 0 };
+    camera.position = (Vector3){ 0.0f, 2.0f, 4.0f };
+    camera.target = (Vector3){ 0.0f, 2.0f, 0.0f };
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera.fovy = 60.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+    
+    p_viewport->addElement(std::make_shared<CameraView3DFill>(camera, drawSceneFunc));
+    
+    swanGui.AddPanel(p_viewport);
 
 	return swanGui;
 }

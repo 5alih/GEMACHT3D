@@ -11,14 +11,14 @@ void CoreEngine::Initialize(){
 	ecs.Initialize();
 	developerConsole.Initialize();
 
-    engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
-    swanGui= renderer.InitGui(engine_font);
-
 	playerCamera.position= {0.0f, 2.0f, 4.0f};
 	playerCamera.target= {0.0f, 2.0f, 0.0f};
 	playerCamera.up= {0.0f, 1.0f, 0.0f};
 	playerCamera.fovy= 60.0f;
 	playerCamera.projection= CAMERA_PERSPECTIVE;
+
+    engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
+    swanGui= renderer.InitGui(engine_font, playerCamera);
 }
 
 // Main game loop
