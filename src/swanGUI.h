@@ -519,14 +519,16 @@ class CameraView3D : public GuiElement{
 public:
 	Camera3D m_camera;
 	RenderTexture m_render_texture;
+	Color m_color;
 	std::function<void(Camera3D&)> m_draw_scene_function;
 	int m_width= 0;
 	bool m_update_camera= false;
 	bool m_is_calculated= false;
 
-	CameraView3D(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function){
+	CameraView3D(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function, Color color){
 		m_camera= camera;
 		m_draw_scene_function= draw_scene_function;
+		m_color= color;
 	}
 
 	~CameraView3D(){
@@ -556,7 +558,7 @@ public:
 
 	void Draw() override{
 		BeginTextureMode(m_render_texture);
-			ClearBackground( ui_panel_header );
+			ClearBackground(m_color);
 				BeginMode3D(m_camera);
 				if(m_draw_scene_function) m_draw_scene_function(m_camera);
 			EndMode3D();
@@ -579,13 +581,15 @@ class CameraView3DFill : public GuiElement{
 public:
     Camera3D m_camera;
     RenderTexture m_render_texture;
+	Color m_color;
     std::function<void(Camera3D&)> m_draw_scene_function;
     bool m_update_camera = false;
     bool m_is_calculated = false;
 
-    CameraView3DFill(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function) {
+    CameraView3DFill(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function, Color color){
         m_camera= camera;
         m_draw_scene_function= draw_scene_function;
+		m_color= color;
     }
 
     ~CameraView3DFill(){
@@ -614,7 +618,7 @@ public:
 
     void Draw() override{
         BeginTextureMode(m_render_texture);
-            ClearBackground(ui_panel_header);
+            ClearBackground(m_color);
             BeginMode3D(m_camera);
                 if(m_draw_scene_function) m_draw_scene_function(m_camera);
             EndMode3D();
@@ -622,6 +626,66 @@ public:
 
         Rectangle sourceRec = {0.0f, 0.0f, (float)m_render_texture.texture.width, (float)-m_render_texture.texture.height};
         DrawTextureRec(m_render_texture.texture, sourceRec, (Vector2){m_position.x -6, m_position.y}, WHITE);	//altered "-6"
+    }
+
+    Camera3D& GetCamera(){
+        return m_camera;
+    }
+
+    RenderTexture& GetRenderTexture(){
+        return m_render_texture;
+    }
+};
+
+class CameraView3DFillBorder : public GuiElement{
+public:
+    Camera3D m_camera;
+    RenderTexture m_render_texture;
+	Color m_color;
+    std::function<void(Camera3D&)> m_draw_scene_function;
+    bool m_update_camera= false;
+    bool m_is_calculated= false;
+
+    CameraView3DFillBorder(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function, Color color){
+        m_camera= camera;
+        m_draw_scene_function= draw_scene_function;
+		m_color= color;
+    }
+
+    ~CameraView3DFillBorder(){
+        UnloadRenderTexture(m_render_texture);
+    }
+
+    void Update() override{
+        if(m_is_calculated== false){
+            m_render_texture= LoadRenderTexture(m_size.x, m_size.y);
+            m_is_calculated= true;
+        }
+
+        if(IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            m_update_camera= true;
+            DisableCursor();
+        }
+        else if(m_update_camera && ((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE))){
+            m_update_camera= false;
+            EnableCursor();
+        }
+
+        if (m_update_camera){
+            UpdateCamera(&m_camera, CAMERA_CUSTOM);
+        }
+    }
+
+    void Draw() override{
+        BeginTextureMode(m_render_texture);
+            ClearBackground(m_color);
+            BeginMode3D(m_camera);
+                if(m_draw_scene_function) m_draw_scene_function(m_camera);
+            EndMode3D();
+        EndTextureMode();
+
+        Rectangle sourceRec= {0.0f, 0.0f, (float)m_render_texture.texture.width, (float)-m_render_texture.texture.height};
+        DrawTextureRec(m_render_texture.texture, sourceRec, m_position, WHITE);
     }
 
     Camera3D& GetCamera(){
@@ -902,6 +966,9 @@ public:
 			newSize.y= newSize.x;
 		}
 	    else if constexpr (std::is_same<T, CameraView3DFill>::value){
+        	newSize.y= m_size.y -(newPosition.y -m_position.y) -element_padding;
+    	}
+	    else if constexpr (std::is_same<T, CameraView3DFillBorder>::value){
         	newSize.y= m_size.y -(newPosition.y -m_position.y) -element_padding;
     	}
 		else if(std::is_same<T, ColorPicker>::value){

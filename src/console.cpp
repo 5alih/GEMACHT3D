@@ -1,11 +1,11 @@
 #include "console.h"
 
-	//TO DO: add alias variable declaring with scripts
-	//			alias number 1453
-	//			alias fraction 12.25
-	//			alias text "Hello World" 
+	//TODO: add alias variable declaring with scripts
+	//		alias number 1453
+	//		alias fraction 12.25
+	//		alias text "Hello World" 
 
-#define FONT_SIZE 15
+#define FONT_SIZE 14
 
 void DeveloperConsole::Initialize(){
 	isEnabled= true;
