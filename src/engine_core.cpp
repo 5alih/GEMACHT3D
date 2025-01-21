@@ -17,8 +17,14 @@ void CoreEngine::Initialize(){
 	playerCamera.fovy= 60.0f;
 	playerCamera.projection= CAMERA_PERSPECTIVE;
 
+    auto drawSceneFunc = [](Camera3D& cam) {
+        Vector3 WorldCenter = {0.0f, 0.0f, 0.0f};
+        Vector2 TestPlaneSize = {20, 20};
+        DrawPlane(WorldCenter, TestPlaneSize, GOLD);
+    };
+
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
-    swanGui= renderer.InitGui(engine_font, playerCamera);
+    swanGui= renderer.InitGui(engine_font, playerCamera, drawSceneFunc);
 }
 
 // Main game loop
@@ -29,10 +35,6 @@ void CoreEngine::Run(){
 		ecs.Update();
 
 		developerConsole.UpdateConsole();
-		if(developerConsole.isEnabled== false){
-			UpdateCamera(&playerCamera, CAMERA_FIRST_PERSON);
-		}
-
 		if(IsKeyPressed(KEY_F1)){
 			if(cursor){
 				DisableCursor();
@@ -46,9 +48,8 @@ void CoreEngine::Run(){
 
 		BeginDrawing();
     	ClearBackground(BLACK);
-		renderer.RenderPlayerView(playerCamera);
-		renderer.RenderFPS(WHITE);
 		renderer.RenderGui(swanGui);
+		renderer.RenderFPS(WHITE);
 		developerConsole.RenderLog();
 
 		EndDrawing();
