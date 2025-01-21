@@ -34,13 +34,13 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	auto p_list= std::make_shared<Panel>("ELEMENT LIST", p_listPos, p_settingsSize, font);
 	swanGui.AddPanel(p_list);
 
-	Vector2 p_bottomPos= {0, 36};
-	Vector2 p_bottomSize= {64, 16};
+	Vector2 p_bottomPos= {0, 37};
+	Vector2 p_bottomSize= {64, 15};
 	auto p_bottom= std::make_shared<Panel>("CONTENT MANAGER", p_bottomPos, p_bottomSize, font);
 	swanGui.AddPanel(p_bottom);
 
     Vector2 p_viewportPos= {0, 0};
-    Vector2 p_viewportSize= {64, 36};
+    Vector2 p_viewportSize= {64, 37};
     auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, font);
     
     p_viewport->addElement(std::make_shared<CameraView3DFill>(camera, function));

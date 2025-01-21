@@ -594,7 +594,7 @@ public:
 
     void Update() override{
         if(m_is_calculated== false){
-            m_render_texture= LoadRenderTexture(m_size.x, m_size.y);  // Use both dimensions
+            m_render_texture= LoadRenderTexture(m_size.x +12, m_size.y);	//altered "+12"
             m_is_calculated= true;
         }
 
@@ -616,12 +616,12 @@ public:
         BeginTextureMode(m_render_texture);
             ClearBackground(ui_panel_header);
             BeginMode3D(m_camera);
-                if (m_draw_scene_function) m_draw_scene_function(m_camera);
+                if(m_draw_scene_function) m_draw_scene_function(m_camera);
             EndMode3D();
         EndTextureMode();
 
         Rectangle sourceRec = {0.0f, 0.0f, (float)m_render_texture.texture.width, (float)-m_render_texture.texture.height};
-        DrawTextureRec(m_render_texture.texture, sourceRec, m_position, WHITE);
+        DrawTextureRec(m_render_texture.texture, sourceRec, (Vector2){m_position.x -6, m_position.y}, WHITE);	//altered "-6"
     }
 
     Camera3D& GetCamera(){
