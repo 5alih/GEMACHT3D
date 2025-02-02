@@ -1,14 +1,14 @@
 #include "console.h"
 
-	//TO DO: add alias variable declaring with scripts
-	//			alias number 1453
-	//			alias fraction 12.25
-	//			alias text "Hello World" 
+	//TODO: add alias variable declaring with scripts
+	//		alias number 1453
+	//		alias fraction 12.25
+	//		alias text "Hello World" 
 
-#define FONT_SIZE 15
+#define FONT_SIZE 14
 
 void DeveloperConsole::Initialize(){
-	isEnabled= true;
+	isEnabled= false;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");
@@ -50,22 +50,21 @@ void DeveloperConsole::UpdateConsole(){
 		else{
 			isReady= false;
 		}
-
-		if(IsKeyDown(KEY_LEFT_CONTROL)){
-			if(IsKeyDown(KEY_KP_9)){
-				scrollAmounth++;
-			}
-			if(IsKeyDown(KEY_KP_3) && scrollAmounth> 0){
-				scrollAmounth--;
-			}
+	}
+	if(IsKeyDown(KEY_LEFT_CONTROL)){
+		if(IsKeyDown(KEY_KP_9)){
+			scrollAmounth++;
 		}
-		else{
-			if(IsKeyPressed(KEY_KP_9)){
-				scrollAmounth++;
-			}
-			if(IsKeyPressed(KEY_KP_3) && scrollAmounth> 0){
-				scrollAmounth--;
-			}
+		if(IsKeyDown(KEY_KP_3) && scrollAmounth> 0){
+			scrollAmounth--;
+		}
+	}
+	else{
+		if(IsKeyPressed(KEY_KP_9)){
+			scrollAmounth++;
+		}
+		if(IsKeyPressed(KEY_KP_3) && scrollAmounth> 0){
+			scrollAmounth--;
 		}
 	}
 }
@@ -83,7 +82,7 @@ void DeveloperConsole::OnOff(){
 }
 
 bool DeveloperConsole::GetIsEnabled(){
-	return isEnabled;	
+	return isEnabled;
 }
 
 void DeveloperConsole::GetInputString(){
@@ -182,14 +181,12 @@ void DeveloperConsole::RenderLog(){
 	int fontSize= FONT_SIZE;
 	int zero= 0;
 	Color TEAL= (Color){0, 200, 170, 255};
-	if(isEnabled== true){
-		log(logs, 5, 5, fontSize, WHITE, TEAL, 20, scrollAmounth, input);
-		if((int)possibleCommands.size()> 0){
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 70, zero, possibleCommands[possibleCommandIndex]);
-		}
-		else{
-			log(possibleCommands, 1005, 5, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
-		}
+	log(logs, 806, 760, fontSize, WHITE, TEAL, 14, scrollAmounth, input);
+	if((int)possibleCommands.size()> 0){
+		log(possibleCommands, 1166, 760, fontSize, LIGHTGRAY, WHITE, 70, zero, possibleCommands[possibleCommandIndex]);
+	}
+	else{
+		log(possibleCommands, 1166, 760, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
 	}
 }
 

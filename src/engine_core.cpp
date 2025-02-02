@@ -3,7 +3,7 @@
 Camera3D playerCamera= {0};
 
 void CoreEngine::Initialize(){
-	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "pine Engine");
+	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "swan engine");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetExitKey(KEY_NULL);
 	MaximizeWindow();
@@ -17,38 +17,24 @@ void CoreEngine::Initialize(){
 	playerCamera.fovy= 60.0f;
 	playerCamera.projection= CAMERA_PERSPECTIVE;
 
-    auto drawSceneFunc = [](Camera3D& cam) {
-        Vector3 WorldCenter = {0.0f, 0.0f, 0.0f};
-        Vector2 TestPlaneSize = {20, 20};
-        DrawPlane(WorldCenter, TestPlaneSize, GOLD);
+    auto drawSceneFunc= [](Camera3D& cam){
+		DrawGrid(20, 2.0f);
+		DrawCube( (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
     };
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
     swanGui= renderer.InitGui(engine_font, playerCamera, drawSceneFunc);
 }
 
-// Main game loop
 void CoreEngine::Run(){
-	bool cursor= true;
 	while(!WindowShouldClose()){
-		input.HandleInput();
+		input.HandleInput(); //imposter
 		ecs.Update();
-
 		developerConsole.UpdateConsole();
-		if(IsKeyPressed(KEY_F1)){
-			if(cursor){
-				DisableCursor();
-				cursor= false;
-			}
-			else{
-				EnableCursor();
-				cursor= true;
-			}
-		}
 
 		BeginDrawing();
     	ClearBackground(BLACK);
-		renderer.RenderGui(swanGui);
+		renderer.RenderGui(swanGui, developerConsole);
 		renderer.RenderFPS(WHITE);
 		developerConsole.RenderLog();
 
@@ -56,7 +42,6 @@ void CoreEngine::Run(){
 	}
 }
 
-// Clean up resources and close the window
 void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
