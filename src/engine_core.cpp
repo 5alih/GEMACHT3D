@@ -34,7 +34,7 @@ void CoreEngine::Run(){
 
 		BeginDrawing();
     	ClearBackground(BLACK);
-		renderer.RenderGui(swanGui);
+		renderer.RenderGui(swanGui, developerConsole);
 		renderer.RenderFPS(WHITE);
 		developerConsole.RenderLog();
 

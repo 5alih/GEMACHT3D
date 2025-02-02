@@ -8,10 +8,12 @@
 
 class Renderer {
 public:
+	std::shared_ptr<Panel> p_console;
+
 	void RenderPlayerView(Camera3D playerCamera);
 	void RenderFPS(Color color);
 	SwanGui InitGui(Font font, Camera3D &camera, std::function<void(Camera3D&)> function);
-	void RenderGui(SwanGui &swanGui);
+	void RenderGui(SwanGui &swanGui, DeveloperConsole &developerConsole);
 };
 
 #endif // RENDERER_H

@@ -55,7 +55,7 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 
 	Vector2 p_consolePos= {40, 37};
 	Vector2 p_consoleSize= {24, 15};
-	auto p_console= std::make_shared<Panel>("DEVELOPER CONSOLE", p_consolePos, p_consoleSize, font);
+	p_console= std::make_shared<Panel>("DEVELOPER CONSOLE", p_consolePos, p_consoleSize, font);
 	swanGui.AddPanel(p_console);
 
     Vector2 p_viewportPos= {0, 0};
@@ -67,7 +67,13 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	return swanGui;
 }
 
-void Renderer::RenderGui(SwanGui &swanGui){
+void Renderer::RenderGui(SwanGui &swanGui, DeveloperConsole &developerConsole){
 	swanGui.Update();
+	if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && p_console->IsMouseOver()){
+		developerConsole.Start();
+	}
+	if(IsKeyPressed(KEY_ESCAPE) && developerConsole.GetIsEnabled()){
+		developerConsole.Exit();
+	}
 	swanGui.Draw();
 }
