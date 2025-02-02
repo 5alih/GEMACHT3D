@@ -8,7 +8,7 @@
 #define FONT_SIZE 14
 
 void DeveloperConsole::Initialize(){
-	isEnabled= true;
+	isEnabled= false;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");

@@ -277,7 +277,7 @@ public:
 			m_get_input= false;
 		}
 
-		if(m_get_input) {
+		if(m_get_input){
 			int key= GetCharPressed();
 
 			if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
@@ -327,6 +327,65 @@ public:
 		DrawRectangleRounded(rec, 0.3f, 2, currentColor);
 		Vector2 pos_val= { (float)static_cast<int>(m_position.x + m_size.x/2 + m_size.x/4 - MeasureText(to_string(*m_target_val).c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
 		DrawTextEx(m_font, to_string(*m_target_val).c_str(), pos_val, font_size, 2.0f, ui_text_light);
+		Vector2 pos_text= { (float)static_cast<int>(m_position.x + m_size.x/4 - MeasureText(m_text.c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
+		DrawTextEx(m_font, m_text.c_str(), pos_text, font_size, 2.0f, textColor);
+	}
+};
+
+class InputBox: public GuiElement{
+public:
+	std::string *m_target_str;
+	int m_max_length= 20;
+	bool m_get_input= false;
+
+	InputBox(std::string text, std::string &target_str, int max_length){
+		m_text= text;
+		m_target_str= &target_str;
+		m_max_length= max_length;
+	}
+
+	InputBox(std::string text, std::string &target_str){
+		m_text= text;
+		m_target_str= &target_str;
+	}
+
+	void Update() override{
+		if(!m_target_str) return;
+		
+		if(IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+			m_get_input= true;
+		}
+		else if((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)){
+			m_get_input= false;
+		}
+
+		if(m_get_input){
+			int key= GetCharPressed();
+
+			std::string input= *m_target_str;
+
+			while(key > 0){
+				if(static_cast<int>(input.length()) < m_max_length){
+					input+= static_cast<char>(key);
+				}
+				key= GetCharPressed();
+			}
+
+			if(IsKeyPressed(KEY_BACKSPACE) && !input.empty()){
+				input.pop_back();
+			}
+			*m_target_str= input;
+		}
+	}
+
+	void Draw() override{
+		Color textColor= IsMouseOver() ? ui_text_hover : ui_text_light;
+		Color currentColor= m_get_input ? ui_element_hover : ui_element_body;
+
+		Rectangle rec= {static_cast<float>(m_position.x + m_size.x/2), static_cast<float>(m_position.y), static_cast<float>(m_size.x/2), static_cast<float>(m_size.y)};
+		DrawRectangleRounded(rec, 0.3f, 2, currentColor);
+		Vector2 pos_val= { (float)static_cast<int>(m_position.x + m_size.x/2 + m_size.x/4 - MeasureText((*m_target_str).c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
+		DrawTextEx(m_font, (*m_target_str).c_str(), pos_val, font_size, 2.0f, ui_text_light);
 		Vector2 pos_text= { (float)static_cast<int>(m_position.x + m_size.x/4 - MeasureText(m_text.c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
 		DrawTextEx(m_font, m_text.c_str(), pos_text, font_size, 2.0f, textColor);
 	}
@@ -525,10 +584,10 @@ public:
 	bool m_update_camera= false;
 	bool m_is_calculated= false;
 
-	CameraView3D(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function, Color color){
+	CameraView3D(Camera3D camera, std::function<void(Camera3D&)> draw_scene_function, Color background_color){
 		m_camera= camera;
 		m_draw_scene_function= draw_scene_function;
-		m_color= color;
+		m_color= background_color;
 	}
 
 	~CameraView3D(){
@@ -841,6 +900,10 @@ public:
 	bool m_is_minimized= false;
 	bool m_is_moving= false;
 	int m_grid_size= grid_size;
+	int m_sections= 1;
+
+	int m_counter= 0;
+	int m_counter2= 0;
 
 	Panel(std::string text, Vector2 position, Vector2 size){
 		m_text= text;
@@ -852,6 +915,14 @@ public:
 		m_text= text;
 		SetPosition( (Vector2){position.x * m_grid_size, position.y * m_grid_size} );
 		SetSize( (Vector2){size.x * m_grid_size, size.y * m_grid_size} );
+		m_custom_font= custom_font;
+	}
+
+	Panel(std::string text, Vector2 position, Vector2 size, int sections, Font custom_font){
+		m_text= text;
+		SetPosition( (Vector2){position.x * m_grid_size, position.y * m_grid_size} );
+		SetSize( (Vector2){size.x * m_grid_size, size.y * m_grid_size} );
+		m_sections= sections;
 		m_custom_font= custom_font;
 	}
 
@@ -899,33 +970,41 @@ public:
 					element->Update();
 			}
 		}
+
 		float wheel_delta= GetMouseWheelMove();
+
 		if(m_is_minimized==false && IsMouseOver() && wheel_delta!= 0){
 			float delta= 0;
 			if(wheel_delta< 0){
-				bool changed_first_element= false;
-				for(int i= 0; i<(int)m_elements.size(); i++){
-					if(changed_first_element== false && m_elements[i]->m_is_visible== true){
-						delta= m_elements[i]->m_size.y +element_padding;
-						m_elements[i]->m_is_visible= false;
-						changed_first_element= true;
+				for(int i= 0; i< m_sections; i++){
+					bool changed_first_element= false;
+					for(int j= i; j< (int)m_elements.size(); j+= m_sections){
+						if(changed_first_element== false && m_elements[j]->m_is_visible== true){
+							delta= m_elements[j]->m_size.y +element_padding;
+							m_elements[j]->m_is_visible= false;
+							m_elements[j]->m_position.y-= delta;
+							changed_first_element= true;
+						}
+						if(m_elements[j]->m_is_visible== true)
+							m_elements[j]->m_position.y-= delta;
 					}
-					m_elements[i]->m_position.y-= delta;
 				}
 			}
 			else if(wheel_delta> 0){
-				int counter= 0;
-				for(int i= 0; i<(int)m_elements.size(); i++){
-					if(m_elements[i]->m_is_visible== false){
-						counter++;
+				for(int i= 0; i< m_sections; i++){
+					int counter= 0;
+					for(int j= i; j< (int)m_elements.size(); j+= m_sections){
+						if(m_elements[j]->m_is_visible== false){
+							counter++;
+						}
 					}
-				}
-				if(counter> 0){
-					delta= m_elements[counter -1]->m_size.y +element_padding;
-					m_elements[counter -1]->m_is_visible= true;
-					for(int i= 0; i<(int)m_elements.size(); i++){
-						if(m_elements[i]->m_is_visible== true)
-							m_elements[i]->m_position.y+= delta;
+					if(counter> 0){
+						delta= m_elements[i +m_sections *(counter -1)]->m_size.y +element_padding;
+						m_elements[i +m_sections *(counter -1)]->m_is_visible= true;
+						for(int k= i; k<(int)m_elements.size(); k+= m_sections){
+							if(m_elements[k]->m_is_visible== true)
+								m_elements[k]->m_position.y+= delta;
+						}
 					}
 				}
 			}
@@ -937,7 +1016,7 @@ public:
 			DrawRectangle(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_size.y), ui_panel_body);
 			DrawRectangleLines(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_size.y), ui_panel_header);
 			for(auto& element : m_elements){
-				if(element->m_is_visible && (element->m_position.y + element->m_size.y)< (m_position.y + m_size.y))
+				if(element->m_is_visible && (element->m_position.y + element->m_size.y)< (m_position.y + m_size.y) && (element-> m_position.y > m_position.y))
 					element->Draw();
 			}
 		}
@@ -950,14 +1029,24 @@ public:
 	void addElement(std::shared_ptr<T> element) {
 		static_assert(std::is_base_of<GuiElement, T>::value, "Element must derive from GuiElement");
 
-		Vector2 newPosition = m_position;
-		newPosition.x += element_padding *2;
-		newPosition.y += element_padding +font_size;
-		for(const auto& elem : m_elements) {
-			newPosition.y += elem->m_size.y + element_padding;
+		if(m_counter>= m_sections){
+			m_counter= 0;
+		}
+
+		Vector2 newPosition= m_position;
+		newPosition.x+= element_padding *2 +(m_counter *(m_size.x/ m_sections));
+		newPosition.y+= element_padding +font_size;
+		int group= 0;
+		for(const auto& elem : m_elements){
+			if(group== m_counter)
+				newPosition.y+= elem->m_size.y +element_padding;
+			
+			group++;
+			if(group== m_sections) group= 0;
 		}
 
 		Vector2 newSize= m_size;
+		newSize.x= m_size.x/m_sections;
 		newSize.x-= element_padding *4;
 		if constexpr (std::is_same<T, Thumbnail>::value || std::is_same<T, ThumbnailGif>::value){
 			newSize.y= font_size *2 + element_padding;
@@ -982,6 +1071,8 @@ public:
 		element->SetSize(newSize);
 		element->SetFont(m_custom_font);
 		m_elements.push_back(element);
+
+		m_counter++;
 	}
 
 	void removeElement(std::shared_ptr<GuiElement> element){
