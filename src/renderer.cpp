@@ -21,27 +21,6 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	auto p_settings= std::make_shared<Panel>("SETTINGS", p_settingsPos, p_settingsSize, 2, font);
 	p_settings->addElement(std::make_shared<Button>("Create entity", [](){}, false));
 	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
-	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
 	p_settings->addElement(std::make_shared<Button>("Save entities", [](){}, true));
 	swanGui.AddPanel(p_settings);
 
