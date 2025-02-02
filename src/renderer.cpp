@@ -36,16 +36,32 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 37};
-	Vector2 p_bottomSize= {64, 15};
-	auto p_bottom= std::make_shared<Panel>("CONTENT MANAGER", p_bottomPos, p_bottomSize, font);
+	Vector2 p_bottomSize= {40, 15};
+	auto p_bottom= std::make_shared<Panel>("CONTENT MANAGER", p_bottomPos, p_bottomSize, 8, font);
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
+	p_bottom->addElement(std::make_shared<Button>("asset", [](){}, false));
 	swanGui.AddPanel(p_bottom);
+
+	Vector2 p_consolePos= {40, 37};
+	Vector2 p_consoleSize= {24, 15};
+	auto p_console= std::make_shared<Panel>("DEVELOPER CONSOLE", p_consolePos, p_consoleSize, font);
+	swanGui.AddPanel(p_console);
 
     Vector2 p_viewportPos= {0, 0};
     Vector2 p_viewportSize= {64, 37};
     auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, font);
-    
     p_viewport->addElement(std::make_shared<CameraView3DFill>(camera, function, (Color){9, 12, 15, 255} ));
-    
     swanGui.AddPanel(p_viewport);
 
 	return swanGui;
