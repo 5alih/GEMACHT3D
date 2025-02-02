@@ -50,22 +50,21 @@ void DeveloperConsole::UpdateConsole(){
 		else{
 			isReady= false;
 		}
-
-		if(IsKeyDown(KEY_LEFT_CONTROL)){
-			if(IsKeyDown(KEY_KP_9)){
-				scrollAmounth++;
-			}
-			if(IsKeyDown(KEY_KP_3) && scrollAmounth> 0){
-				scrollAmounth--;
-			}
+	}
+	if(IsKeyDown(KEY_LEFT_CONTROL)){
+		if(IsKeyDown(KEY_KP_9)){
+			scrollAmounth++;
 		}
-		else{
-			if(IsKeyPressed(KEY_KP_9)){
-				scrollAmounth++;
-			}
-			if(IsKeyPressed(KEY_KP_3) && scrollAmounth> 0){
-				scrollAmounth--;
-			}
+		if(IsKeyDown(KEY_KP_3) && scrollAmounth> 0){
+			scrollAmounth--;
+		}
+	}
+	else{
+		if(IsKeyPressed(KEY_KP_9)){
+			scrollAmounth++;
+		}
+		if(IsKeyPressed(KEY_KP_3) && scrollAmounth> 0){
+			scrollAmounth--;
 		}
 	}
 }

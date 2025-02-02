@@ -2,7 +2,6 @@
 #define RENDERER_H
 
 #include "my_functions.h"
-#include "ecs.h"
 #include "console.h"
 #include "swanGUI.h"
 

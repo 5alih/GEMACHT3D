@@ -28,7 +28,7 @@ void CoreEngine::Initialize(){
 
 void CoreEngine::Run(){
 	while(!WindowShouldClose()){
-		input.HandleInput();
+		input.HandleInput(); //imposter
 		ecs.Update();
 		developerConsole.UpdateConsole();
 
