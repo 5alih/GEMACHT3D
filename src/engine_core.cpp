@@ -3,7 +3,7 @@
 Camera3D playerCamera= {0};
 
 void CoreEngine::Initialize(){
-	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "pine Engine");
+	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "swan engine");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetExitKey(KEY_NULL);
 	MaximizeWindow();
