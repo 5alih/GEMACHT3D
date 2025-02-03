@@ -5,9 +5,11 @@ Camera3D playerCamera= {0};
 void CoreEngine::Initialize(){
 	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "swan engine");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
+	SetWindowState(FLAG_INTERLACED_HINT);
 	SetExitKey(KEY_NULL);
-	MaximizeWindow();
 	SetTargetFPS(144);
+	static Image iconpng= LoadImage("resource/image/clown.png");
+	SetWindowIcon(iconpng);
 	ecs.Initialize();
 	developerConsole.Initialize();
 
