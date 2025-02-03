@@ -181,12 +181,12 @@ void DeveloperConsole::RenderLog(){
 	int fontSize= FONT_SIZE;
 	int zero= 0;
 	Color TEAL= (Color){0, 200, 170, 255};
-	log(logs, 806, 760, fontSize, WHITE, TEAL, 16, scrollAmounth, input);
+	log(logs, 806, 775, fontSize, WHITE, TEAL, 15, scrollAmounth, input);
 	if((int)possibleCommands.size()> 0){
-		log(possibleCommands, 1166, 760, fontSize, LIGHTGRAY, WHITE, 70, zero, possibleCommands[possibleCommandIndex]);
+		log(possibleCommands, 1166, 775, fontSize, LIGHTGRAY, WHITE, 70, zero, possibleCommands[possibleCommandIndex]);
 	}
 	else{
-		log(possibleCommands, 1166, 760, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
+		log(possibleCommands, 1166, 775, fontSize, LIGHTGRAY, WHITE, 70, zero, "");
 	}
 }
 
