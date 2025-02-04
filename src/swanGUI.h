@@ -43,21 +43,21 @@
 #include <iostream>
 #include "raylib.h"
 
-inline Color ui_background= 	{25, 25, 25, 255};
-inline Color ui_panel_body= 	{17, 24, 32, 255};
-inline Color ui_panel_header= 	{9, 12, 15, 255};
+inline Color ui_background=		{25, 25, 25, 255};
+inline Color ui_panel_body=		{17, 24, 32, 255};
+inline Color ui_panel_header=   {9, 12, 15, 255};
 
-inline Color ui_element_body=	{29, 38, 51, 255};
-inline Color ui_element_hover=	{24, 30, 40, 255};
-inline Color ui_element_click=	{10, 10, 10, 255};
+inline Color ui_element_body=  {29, 38, 51, 255};
+inline Color ui_element_hover= {44, 55, 70, 255};
+inline Color ui_element_click= {10, 10, 10, 255};
 
-inline Color ui_text_dark=	 	{255, 255, 255, 255};
+inline Color ui_text_dark=	{255, 255, 255, 255};
 inline Color ui_text_light= {175, 180, 190, 255};
 inline Color ui_text_hover= {240, 245, 255, 255};
 inline Color ui_text_highl= {210, 215, 225, 255};
 
-inline Color ui_special=		{243, 169, 78, 255};
-inline Color ui_special_h=		{175, 122, 58, 255};
+inline Color ui_special=	{243, 169, 78, 255};
+inline Color ui_special_h=	{175, 122, 58, 255};
 
 inline const int font_size= 14;
 inline const int element_padding= 3;
@@ -1090,6 +1090,94 @@ public:
 
 	void removeElement(std::shared_ptr<GuiElement> element){
 		m_elements.erase(std::remove(m_elements.begin(), m_elements.end(), element), m_elements.end());
+	}
+};
+
+//might add drop right and drop left menus
+class DropDown: public GuiElement{
+public:
+	bool m_is_selected= false;
+	int m_extra_width= 0;
+	int m_element_count= 0;
+	Vector2 m_panel_pos;
+	Vector2 m_panel_size;
+	std::shared_ptr<Panel> *m_panel;
+
+	DropDown(const std::string text, int extra_width, int element_count){
+		m_text= text;
+		m_extra_width= extra_width;
+		m_element_count= element_count;
+
+		// m_panel= std::make_shared<Panel>("dropdown-panel", m_panel_pos, m_panel_size, false, 1, m_font);
+	}
+
+	Vector2 GetPanelPos(){
+		Vector2 temp;
+		temp.x= m_panel_pos.x/20.0;
+		temp.y= m_panel_pos.y/20.0;
+		return temp;
+	}
+
+	Vector2 GetPanelSize(){
+		Vector2 temp;
+		temp.x= m_panel_size.x/20.0;
+		temp.y= m_panel_size.y/20.0;
+		return temp;
+	}
+
+	void PrintDimensions(){
+		Vector2 pos= GetPanelPos();
+		Vector2 size= GetPanelSize();
+		std::cout<<"pos x :"<<pos.x<<std::endl;
+		std::cout<<"pos y :"<<pos.y<<std::endl;
+		std::cout<<"size x :"<<size.x<<std::endl;
+		std::cout<<"size y :"<<size.y<<std::endl;
+		//size.y is +0.85 for each element
+	}
+
+	void SetPanel(std::shared_ptr<Panel> &panel){
+		m_panel= &panel;
+	}
+
+	void Update() override{
+		static bool is_initialized= false;
+		if(!is_initialized){
+			m_panel_pos.x= m_position.x;
+			m_panel_pos.y= (m_position.y +font_size +element_padding);
+			m_panel_size.x= (m_size.x +m_extra_width);
+			m_panel_size.y= (element_padding +((font_size +element_padding) *m_element_count));
+			is_initialized= false;
+		}
+
+		if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+			if(IsMouseOver()){
+				m_is_selected= !m_is_selected;
+			}
+			else if(!(m_is_selected && IsMouseOverEx(m_panel_pos, m_panel_size))){
+				m_is_selected= false;
+			}
+		}
+		if(m_is_selected){
+			(*m_panel)->Update();
+		}
+	}
+
+	void Draw() override{
+		Color currentColor= IsMouseOver()  ? ui_element_hover : ui_element_body;
+
+		Rectangle rec= {static_cast<float>(m_position.x), static_cast<float>(m_position.y), static_cast<float>(m_size.x), static_cast<float>(m_size.y)};
+		DrawRectangleRounded(rec, 0.3f, 2, currentColor);
+		rec= {static_cast<float>(m_position.x +2), static_cast<float>(m_position.y +2), static_cast<float>(m_size.x -4), static_cast<float>(m_size.y -4)};
+		DrawRectangleRounded(rec, 0.3f, 2, ui_panel_body);
+		Vector2 pos= { (float)static_cast<int>(m_position.x + m_size.x/2 - MeasureText(m_text.c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
+		DrawTextEx(m_font, m_text.c_str(), pos, font_size, 2.0f, ui_text_light);
+
+		Vector2 pos2= {(float)static_cast<int>(m_position.x + m_size.x - MeasureText(m_text.c_str(), font_size)/2), pos.y +5};
+		DrawTriangle( (Vector2){pos2.x, pos2.y}, (Vector2){pos2.x +3, pos2.y +5}, (Vector2){pos2.x +6, pos2.y}, ui_text_light);
+
+		if(m_is_selected){
+			(*m_panel)->Draw();
+		}
 	}
 };
 
