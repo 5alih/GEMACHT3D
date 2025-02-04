@@ -43,21 +43,21 @@
 #include <iostream>
 #include "raylib.h"
 
-inline Color ui_background= 	{25, 25, 25, 255};
-inline Color ui_panel_body= 	{17, 24, 32, 255};
-inline Color ui_panel_header= 	{9, 12, 15, 255};
+inline Color ui_background=		{25, 25, 25, 255};
+inline Color ui_panel_body=		{17, 24, 32, 255};
+inline Color ui_panel_header=   {9, 12, 15, 255};
 
-inline Color ui_element_body=	{29, 38, 51, 255};
-inline Color ui_element_hover=	{24, 30, 40, 255};
-inline Color ui_element_click=	{10, 10, 10, 255};
+inline Color ui_element_body=  {29, 38, 51, 255};
+inline Color ui_element_hover= {44, 55, 70, 255};
+inline Color ui_element_click= {10, 10, 10, 255};
 
-inline Color ui_text_dark=	 	{255, 255, 255, 255};
+inline Color ui_text_dark=	{255, 255, 255, 255};
 inline Color ui_text_light= {175, 180, 190, 255};
 inline Color ui_text_hover= {240, 245, 255, 255};
 inline Color ui_text_highl= {210, 215, 225, 255};
 
-inline Color ui_special=		{243, 169, 78, 255};
-inline Color ui_special_h=		{175, 122, 58, 255};
+inline Color ui_special=	{243, 169, 78, 255};
+inline Color ui_special_h=	{175, 122, 58, 255};
 
 inline const int font_size= 14;
 inline const int element_padding= 3;
@@ -901,9 +901,8 @@ public:
 	bool m_is_moving= false;
 	int m_grid_size= grid_size;
 	int m_sections= 1;
-
+	bool m_has_header= true;
 	int m_counter= 0;
-	int m_counter2= 0;
 
 	Panel(std::string text, Vector2 position, Vector2 size){
 		m_text= text;
@@ -926,41 +925,52 @@ public:
 		m_custom_font= custom_font;
 	}
 
+	Panel(std::string text, Vector2 position, Vector2 size, bool has_header, int sections, Font custom_font){
+		m_text= text;
+		SetPosition( (Vector2){position.x * m_grid_size, position.y * m_grid_size} );
+		SetSize( (Vector2){size.x * m_grid_size, size.y * m_grid_size} );
+		m_has_header= has_header;
+		m_sections= sections;
+		m_custom_font= custom_font;
+	}
+
 	void Update() override{
-		if(IsMouseOverEx(m_position, (Vector2){m_size.x, (float)m_header_size}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-			m_is_minimized= !m_is_minimized;
-		}
-		if(m_is_moving== false && IsMouseOverEx(m_position, (Vector2){m_size.x, (float)m_header_size}) && IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)){
-			m_is_moving= true;
-		}
-		else if(m_is_moving== true && (IsKeyPressed(KEY_ESCAPE) || IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))){
-			Vector2 fixedPos;
-			fixedPos.x= (int)(m_position.x / m_grid_size);
-			fixedPos.y= (int)(m_position.y / m_grid_size);
-
-			fixedPos.x= ( ((fixedPos.x *m_grid_size) -m_position.x) *(-1) < (((fixedPos.x + 1) *m_grid_size) -m_position.x )) ? fixedPos.x *m_grid_size : (fixedPos.x + 1) *m_grid_size;
-			fixedPos.y= ( ((fixedPos.y *m_grid_size) -m_position.y) *(-1) < (((fixedPos.y + 1) *m_grid_size) -m_position.y )) ? fixedPos.y *m_grid_size : (fixedPos.y + 1) *m_grid_size;
-				Vector2 delta;
-			delta.x= fixedPos.x -m_position.x;
-			delta.y= fixedPos.y -m_position.y;
-
-			m_position= fixedPos;
-
-			for(auto &element: m_elements){
-				element->m_position.x+= delta.x;
-				element->m_position.y+= delta.y;
+		if(m_has_header){
+			if(IsMouseOverEx(m_position, (Vector2){m_size.x, (float)m_header_size}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+				m_is_minimized= !m_is_minimized;
 			}
-			m_is_moving= false;
-		}
+			if(m_is_moving== false && IsMouseOverEx(m_position, (Vector2){m_size.x, (float)m_header_size}) && IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)){
+				m_is_moving= true;
+			}
+			else if(m_is_moving== true && (IsKeyPressed(KEY_ESCAPE) || IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))){
+				Vector2 fixedPos;
+				fixedPos.x= (int)(m_position.x / m_grid_size);
+				fixedPos.y= (int)(m_position.y / m_grid_size);
 
-		if(m_is_moving){
-			Vector2 delta= GetMouseDelta();
-			m_position.x+= delta.x;
-			m_position.y+= delta.y;
+				fixedPos.x= ( ((fixedPos.x *m_grid_size) -m_position.x) *(-1) < (((fixedPos.x + 1) *m_grid_size) -m_position.x )) ? fixedPos.x *m_grid_size : (fixedPos.x + 1) *m_grid_size;
+				fixedPos.y= ( ((fixedPos.y *m_grid_size) -m_position.y) *(-1) < (((fixedPos.y + 1) *m_grid_size) -m_position.y )) ? fixedPos.y *m_grid_size : (fixedPos.y + 1) *m_grid_size;
+					Vector2 delta;
+				delta.x= fixedPos.x -m_position.x;
+				delta.y= fixedPos.y -m_position.y;
 
-			for(auto &element: m_elements){
-				element->m_position.x+= delta.x;
-				element->m_position.y+= delta.y;
+				m_position= fixedPos;
+
+				for(auto &element: m_elements){
+					element->m_position.x+= delta.x;
+					element->m_position.y+= delta.y;
+				}
+				m_is_moving= false;
+			}
+
+			if(m_is_moving){
+				Vector2 delta= GetMouseDelta();
+				m_position.x+= delta.x;
+				m_position.y+= delta.y;
+
+				for(auto &element: m_elements){
+					element->m_position.x+= delta.x;
+					element->m_position.y+= delta.y;
+				}
 			}
 		}
 
@@ -1013,16 +1023,19 @@ public:
 
 	void Draw() override{
 		if(m_is_minimized== false){
-			DrawRectangle(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_size.y), ui_panel_body);
+			Color tempColor= m_has_header ? ui_panel_body : ui_panel_header;
+			DrawRectangle(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_size.y), tempColor);
 			DrawRectangleLines(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_size.y), ui_panel_header);
 			for(auto& element : m_elements){
 				if(element->m_is_visible && (element->m_position.y + element->m_size.y)< (m_position.y + m_size.y) && (element-> m_position.y > m_position.y))
 					element->Draw();
 			}
 		}
-		DrawRectangle(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_header_size), ui_panel_header);
-		Vector2 pos= { (float)static_cast<int>(m_position.x + element_padding), (float)static_cast<int>(m_position.y + m_header_size/2 - font_size/2.5)};
-		DrawTextEx(m_custom_font, m_text.c_str(), pos, font_size, 2.0f, ui_text_highl);
+		if(m_has_header){
+			DrawRectangle(static_cast<int>(m_position.x), static_cast<int>(m_position.y), static_cast<int>(m_size.x), static_cast<int>(m_header_size), ui_panel_header);
+			Vector2 pos= { (float)static_cast<int>(m_position.x + element_padding), (float)static_cast<int>(m_position.y + m_header_size/2 - font_size/2.5)};
+			DrawTextEx(m_custom_font, m_text.c_str(), pos, font_size, 2.0f, ui_text_highl);
+		}
 	}
 
 	template <typename T>
@@ -1035,7 +1048,7 @@ public:
 
 		Vector2 newPosition= m_position;
 		newPosition.x+= element_padding *2 +(m_counter *(m_size.x/ m_sections));
-		newPosition.y+= element_padding +font_size;
+		newPosition.y+= (m_has_header ? element_padding +font_size : element_padding);
 		int group= 0;
 		for(const auto& elem : m_elements){
 			if(group== m_counter)
@@ -1077,6 +1090,94 @@ public:
 
 	void removeElement(std::shared_ptr<GuiElement> element){
 		m_elements.erase(std::remove(m_elements.begin(), m_elements.end(), element), m_elements.end());
+	}
+};
+
+//might add drop right and drop left menus
+class DropDown: public GuiElement{
+public:
+	bool m_is_selected= false;
+	int m_extra_width= 0;
+	int m_element_count= 0;
+	Vector2 m_panel_pos;
+	Vector2 m_panel_size;
+	std::shared_ptr<Panel> *m_panel;
+
+	DropDown(const std::string text, int extra_width, int element_count){
+		m_text= text;
+		m_extra_width= extra_width;
+		m_element_count= element_count;
+
+		// m_panel= std::make_shared<Panel>("dropdown-panel", m_panel_pos, m_panel_size, false, 1, m_font);
+	}
+
+	Vector2 GetPanelPos(){
+		Vector2 temp;
+		temp.x= m_panel_pos.x/20.0;
+		temp.y= m_panel_pos.y/20.0;
+		return temp;
+	}
+
+	Vector2 GetPanelSize(){
+		Vector2 temp;
+		temp.x= m_panel_size.x/20.0;
+		temp.y= m_panel_size.y/20.0;
+		return temp;
+	}
+
+	void PrintDimensions(){
+		Vector2 pos= GetPanelPos();
+		Vector2 size= GetPanelSize();
+		std::cout<<"pos x :"<<pos.x<<std::endl;
+		std::cout<<"pos y :"<<pos.y<<std::endl;
+		std::cout<<"size x :"<<size.x<<std::endl;
+		std::cout<<"size y :"<<size.y<<std::endl;
+		//size.y is +0.85 for each element
+	}
+
+	void SetPanel(std::shared_ptr<Panel> &panel){
+		m_panel= &panel;
+	}
+
+	void Update() override{
+		static bool is_initialized= false;
+		if(!is_initialized){
+			m_panel_pos.x= m_position.x;
+			m_panel_pos.y= (m_position.y +font_size +element_padding);
+			m_panel_size.x= (m_size.x +m_extra_width);
+			m_panel_size.y= (element_padding +((font_size +element_padding) *m_element_count));
+			is_initialized= false;
+		}
+
+		if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+			if(IsMouseOver()){
+				m_is_selected= !m_is_selected;
+			}
+			else if(!(m_is_selected && IsMouseOverEx(m_panel_pos, m_panel_size))){
+				m_is_selected= false;
+			}
+		}
+		if(m_is_selected){
+			(*m_panel)->Update();
+		}
+	}
+
+	void Draw() override{
+		Color currentColor= IsMouseOver()  ? ui_element_hover : ui_element_body;
+
+		Rectangle rec= {static_cast<float>(m_position.x), static_cast<float>(m_position.y), static_cast<float>(m_size.x), static_cast<float>(m_size.y)};
+		DrawRectangleRounded(rec, 0.3f, 2, currentColor);
+		rec= {static_cast<float>(m_position.x +2), static_cast<float>(m_position.y +2), static_cast<float>(m_size.x -4), static_cast<float>(m_size.y -4)};
+		DrawRectangleRounded(rec, 0.3f, 2, ui_panel_body);
+		Vector2 pos= { (float)static_cast<int>(m_position.x + m_size.x/2 - MeasureText(m_text.c_str(), font_size)/2), (float)static_cast<int>(m_position.y + m_size.y/2 - font_size/2.5)};
+		DrawTextEx(m_font, m_text.c_str(), pos, font_size, 2.0f, ui_text_light);
+
+		Vector2 pos2= {(float)static_cast<int>(m_position.x + m_size.x - MeasureText(m_text.c_str(), font_size)/2), pos.y +5};
+		DrawTriangle( (Vector2){pos2.x, pos2.y}, (Vector2){pos2.x +3, pos2.y +5}, (Vector2){pos2.x +6, pos2.y}, ui_text_light);
+
+		if(m_is_selected){
+			(*m_panel)->Draw();
+		}
 	}
 };
 
