@@ -1,24 +1,28 @@
 #include "renderer.h"
 
-void Renderer::RenderPlayerView(Camera3D playerCamera){
-	Vector3 WorldCenter= {0.0f, 0.0f, 0.0f};
-	Vector2 TestPlaneSize= {20, 20};
-
-	BeginMode3D(playerCamera);
-		DrawPlane(WorldCenter, TestPlaneSize, DARKGRAY);
-	EndMode3D();
-}
-
 // auto dd_settings= std::make_shared<DropDown>("Settings", 0, 3);
 // auto dd_scenes= std::make_shared<DropDown>("Scenes", 0, 3);
 // auto dd_themes= std::make_shared<DropDown>("Themes", 0, 3);
+
+auto drawSceneFunc= [](Camera3D& cam){
+	DrawGrid(20, 2.0f);
+	DrawCube( (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
+};
+
+Camera3D playerCamera= {0};
 
 void Renderer::RenderFPS(Color color){
 	DrawText(to_const_char(to_string(GetFPS())), GetMonitorWidth(0) -20, 5, 10, color);
 }
 
-SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera3D&)> function){
+SwanGui Renderer::InitGui(Font font){
 	SwanGui swanGui;
+
+	playerCamera.position= {0.0f, 2.0f, 4.0f};
+	playerCamera.target= {0.0f, 2.0f, 0.0f};
+	playerCamera.up= {0.0f, 1.0f, 0.0f};
+	playerCamera.fovy= 60.0f;
+	playerCamera.projection= CAMERA_PERSPECTIVE;
 
 	Vector2 p_settingsPos= {64, 19};
 	Vector2 p_settingsSize= {22	, 35};
@@ -27,12 +31,6 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	p_settings->addElement(std::make_shared<Button>("Delete entity", [](){}, false));
 	p_settings->addElement(std::make_shared<Button>("Save entities", [](){}, true));
 	swanGui.AddPanel(p_settings);
-
-	Vector2 p_previewPos= {64, 1};
-	Vector2 p_previewSize= {22, 18};
-	auto p_preview= std::make_shared<Panel>("PREVIEW", p_previewPos, p_previewSize, font);
-	p_preview->addElement(std::make_shared<CameraView3DFillBorder>(camera, function, ui_panel_body));
-	swanGui.AddPanel(p_preview);
 
 	Vector2 p_listPos= {86, 1};
 	Vector2 p_listSize= {10, 52};
@@ -56,8 +54,14 @@ SwanGui Renderer::InitGui(Font font, Camera3D &camera, std::function<void(Camera
 	Vector2 p_viewportPos= {0, 1};
 	Vector2 p_viewportSize= {64, 37};
 	auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, false, 1, font);
-	p_viewport->addElement(std::make_shared<CameraView3DFill>(camera, function, ui_panel_body));
+	p_viewport->addElement(std::make_shared<CameraView3DFill>(playerCamera, drawSceneFunc, ui_panel_body));
 	swanGui.AddPanel(p_viewport);
+
+	Vector2 p_previewPos= {64, 1};
+	Vector2 p_previewSize= {22, 18};
+	auto p_preview= std::make_shared<Panel>("PREVIEW", p_previewPos, p_previewSize, font);
+	p_preview->addElement(std::make_shared<CameraView3DFillBorder>(playerCamera, drawSceneFunc, ui_panel_body));
+	swanGui.AddPanel(p_preview);
 
 	Vector2 p_topPos= {0, 0};
 	Vector2 p_topSize= {96, 1};
