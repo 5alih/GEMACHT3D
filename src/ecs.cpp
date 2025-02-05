@@ -25,28 +25,26 @@ int Entity::GetComponentId(int index){
 }
 
 
-void Entity::RemoveComponent(int componentTypeId) {
-    auto typeIt = std::find(component_types.begin(), component_types.end(), componentTypeId);
-    if (typeIt != component_types.end()) {
-        int index = std::distance(component_types.begin(), typeIt);
-        int componentInstanceId = component_ids[index];
-        if (ecs->componentArrays.find(componentTypeId) != ecs->componentArrays.end()) {
-            auto& componentArray = ecs->componentArrays[componentTypeId];
+void Entity::RemoveComponent(int componentTypeId){
+	auto typeIt= std::find(component_types.begin(), component_types.end(), componentTypeId);
+	if(typeIt!= component_types.end()){
+		int index= std::distance(component_types.begin(), typeIt);
+		int componentInstanceId= component_ids[index];
+		if(ecs->componentArrays.find(componentTypeId)!= ecs->componentArrays.end()){
+			auto& componentArray= ecs->componentArrays[componentTypeId];
 
-            if ((size_t)componentInstanceId < componentArray.size()) {
-                componentArray[componentInstanceId] = nullptr; // Avoid erasing to prevent index changes
-            }
-        }
-        component_types.erase(typeIt);
-        component_ids.erase(component_ids.begin() + index);
-    }
+			if((size_t)componentInstanceId <componentArray.size()){
+				componentArray[componentInstanceId]= nullptr; // Avoid erasing to prevent index changes
+			}
+		}
+		component_types.erase(typeIt);
+		component_ids.erase(component_ids.begin() +index);
+	}
 }
 
 //_______________________________________________________________ INITIALIZE ________________________________________________________________
 
-void ECS::Initialize() {
-    entities.reserve(32);
-
+void ECS::Initialize(){
 	this->RegisterComponentType<TransformComponent>(TRANSFORM_COMPONENT); // 0 is the type ID for TransformComponent
 	this->RegisterComponentType<HealthComponent>(HEALTH_COMPONENT);
 
@@ -56,33 +54,33 @@ void ECS::Initialize() {
 
 //___________________________________________________________________________________________________________________________________________
 
-Entity ECS::CreateEntity() {
-    Entity entity(this);  // Pass a pointer to the current ECS instance
-    entity.SetId(entityId++);
-    entities.push_back(entity);
-    return entity;
+Entity ECS::CreateEntity(){
+	Entity entity(this);  // Pass a pointer to the current ECS instance
+	entity.SetId(entityId++);
+	entities.push_back(entity);
+	return entity;
 }
 
-bool ECS::DeleteEntity(int id) {
-    for (size_t i = 0; i < entities.size(); i++) {
-        if (entities[i].GetId() == id) {
-            entities.erase(entities.begin() + i);
-            return true;
-        }
-    }
+bool ECS::DeleteEntity(int id){
+	for (size_t i= 0; i <entities.size(); i++){
+		if(entities[i].GetId()== id){
+			entities.erase(entities.begin() +i);
+			return true;
+		}
+	}
 	return false;
 }
 
-void ECS::Update() {
-    for (auto& system : systems) {
-        system->Update(*this);
-    }
+void ECS::Update(){
+	for(auto& system: systems){
+		system->Update(*this);
+	}
 }
 
 void ECS::Shutdown(){
 	entities.clear();
 }
 
-void ECS::AddSystem(std::shared_ptr<System> system) {
-    systems.push_back(system);
+void ECS::AddSystem(std::shared_ptr<System> system){
+	systems.push_back(system);
 }
