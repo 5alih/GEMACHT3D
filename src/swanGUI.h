@@ -34,11 +34,8 @@
 
 #include <vector>
 #include <string>
-#include <unordered_map>
 #include <memory>
 #include <functional>
-#include <algorithm>
-#include <stdexcept>
 #include <sstream>
 #include <iostream>
 #include "raylib.h"
@@ -1039,7 +1036,7 @@ public:
 	}
 
 	template <typename T>
-	void addElement(std::shared_ptr<T> element) {
+	void addElement(std::shared_ptr<T> element){
 		static_assert(std::is_base_of<GuiElement, T>::value, "Element must derive from GuiElement");
 
 		if(m_counter>= m_sections){
