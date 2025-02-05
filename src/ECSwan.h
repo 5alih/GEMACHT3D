@@ -99,11 +99,21 @@ public:
 		return entity;
 	}
 
-	void RemoveEntity(std::shared_ptr<Entity> entity){
+	void DeleteEntity(std::shared_ptr<Entity> entity){
 		m_entities.erase(
 			std::remove(m_entities.begin(), m_entities.end(), entity),
 			m_entities.end()
 		);
+	}
+
+	bool DeleteEntity(int id){
+		for(int i= 0; i< (int)m_entities.size(); i++){
+			if(m_entities[i]->m_id== id){
+				m_entities.erase(m_entities.begin() +i);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void Update(){

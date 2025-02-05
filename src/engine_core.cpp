@@ -1,14 +1,13 @@
 #include "engine_core.h"
 
 void CoreEngine::Initialize(){
-	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "GEMACHT 3D");
+	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "SWAN 3D");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowState(FLAG_INTERLACED_HINT);
 	SetExitKey(KEY_NULL);
 	SetTargetFPS(144);
 	static Image iconpng= LoadImage("resource/image/gelbox.png");
 	SetWindowIcon(iconpng);
-	ecs.Initialize();
 	developerConsole.Initialize(ecs);
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);

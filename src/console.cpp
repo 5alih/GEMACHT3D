@@ -7,7 +7,7 @@
 
 #define FONT_SIZE 14
 
-void DeveloperConsole::Initialize(ECS &ecs_){
+void DeveloperConsole::Initialize(ECSwan &ecs_){
 	isEnabled= false;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
@@ -235,8 +235,8 @@ void DeveloperConsole::Quit_exec(){				// "Quit"
 }
 
 void DeveloperConsole::CreateEntity_exec(){		// "CreateEntity"
-	Entity entity= ecs->CreateEntity();
-	logs.push_back("Created entity with id: " + to_string(entity.GetId()));
+	auto entity= ecs->CreateEntity();
+	logs.push_back("Created entity with id: " + to_string(entity->m_id));
 }
 
 void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
@@ -260,7 +260,7 @@ void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 
 void DeveloperConsole::ListEntities_exec(){		// "ListEntities"
 	logs.push_back("List of entities: ");
-	for(int i= 0; i< (int)ecs->entities.size(); i++){
-		logs.push_back(to_string(ecs->entities[i].GetId()));
+	for(int i= 0; i< (int)ecs->m_entities.size(); i++){
+		logs.push_back(to_string(ecs->m_entities[i]->m_id));
 	}
 }

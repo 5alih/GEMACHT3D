@@ -66,7 +66,7 @@ SwanGui Renderer::InitGui(Font font){
 	Vector2 p_topPos= {0, 0};
 	Vector2 p_topSize= {96, 1};
 	auto p_top= std::make_shared<Panel>("p_top", p_topPos, p_topSize, false, 18, font);
-	p_top->addElement(std::make_shared<Comment>("GEMACHT 3D"));
+	p_top->addElement(std::make_shared<Comment>("SWAN 3D"));
 
 	auto dd_settings= std::make_shared<DropDown>("Settings", 0, 3);
 	auto dd_scenes= std::make_shared<DropDown>("Scenes", 0, 2);
