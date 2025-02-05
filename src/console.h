@@ -15,11 +15,11 @@ public:
 	std::vector<std::function<void()>> executers;
 	int possibleCommandIndex;
 	int scrollAmounth;
-	ECS ecs;
+	ECS *ecs;
 	std::vector<std::string> logs;
 
 	void UpdateConsole();
-	void Initialize();
+	void Initialize(ECS &ecs);
 	void Start();
 	void Exit();
 	void OnOff();

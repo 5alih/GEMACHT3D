@@ -9,7 +9,7 @@ void CoreEngine::Initialize(){
 	static Image iconpng= LoadImage("resource/image/gelbox.png");
 	SetWindowIcon(iconpng);
 	ecs.Initialize();
-	developerConsole.Initialize();
+	developerConsole.Initialize(ecs);
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
     swanGui= renderer.InitGui(engine_font);
