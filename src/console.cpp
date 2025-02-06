@@ -7,16 +7,13 @@
 
 #define FONT_SIZE 14
 
-void DeveloperConsole::Initialize(ECS &ecs_){
+void DeveloperConsole::Initialize(){
 	isEnabled= false;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");
 	consoleFont= LoadFontEx("resource/font/JetBrainsMono-Regular.ttf", FONT_SIZE, 0, 0);
 	scrollAmounth= 0;
-
-	ecs= &ecs_;
-
 	//________________________________________________________________ COMMANDS _________________________________________________________________
 
 	allCommands= {
@@ -26,7 +23,8 @@ void DeveloperConsole::Initialize(ECS &ecs_){
 	"quit",
 	"createEntity",
 	"deleteEntity",
-	"listEntities"
+	"listEntities",
+	"addComponent"
 	};
 	
 	executers.push_back([this](){ Echo_exec(); });
@@ -36,6 +34,7 @@ void DeveloperConsole::Initialize(ECS &ecs_){
 	executers.push_back([this](){ CreateEntity_exec(); });
 	executers.push_back([this](){ DeleteEntity_exec(); });
 	executers.push_back([this](){ ListEntities_exec(); });
+	executers.push_back([this](){ AddComponent_exec(); });
 	//___________________________________________________________________________________________________________________________________________
 }
 
@@ -235,8 +234,8 @@ void DeveloperConsole::Quit_exec(){				// "Quit"
 }
 
 void DeveloperConsole::CreateEntity_exec(){		// "CreateEntity"
-	Entity entity= ecs->CreateEntity();
-	logs.push_back("Created entity with id: " + to_string(entity.GetId()));
+	auto entity= ecswan->CreateEntity();
+	logs.push_back("Created entity with id: " + to_string(entity->m_id));
 }
 
 void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
@@ -250,7 +249,7 @@ void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 		return;
 	}
 	int id= std::stoi(parts[1]);
-	if(ecs->DeleteEntity(id)){
+	if(ecswan->DeleteEntity(id)){
 		logs.push_back("Deleted entity with id: " + parts[1]);
 	}
 	else{
@@ -260,7 +259,37 @@ void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 
 void DeveloperConsole::ListEntities_exec(){		// "ListEntities"
 	logs.push_back("List of entities: ");
-	for(int i= 0; i< (int)ecs->entities.size(); i++){
-		logs.push_back(to_string(ecs->entities[i].GetId()));
+	for(int i= 0; i< (int)ecswan->m_entities.size(); i++){
+		logs.push_back(to_string(ecswan->m_entities[i]->m_id));
+	}
+}
+
+void DeveloperConsole::AddComponent_exec(){		// "addComponent id component args"
+	std::vector<std::string> parts= split_string(input, ' ');
+	if((int)parts.size()< 3){
+		logs.push_back("[!] Expected Format: \"addComponent int char*\"");
+		return;
+	}
+	else if(!is_number(parts[1])){
+		logs.push_back("[!] Expected argument: \"int\"");
+		return;
+	}
+	int id= std::stoi(parts[1]);
+	if(parts[2]== "transform"){
+		Vector3 pos;
+		pos.x= std::stof(parts[3]);
+		pos.y= std::stof(parts[4]);
+		pos.z= std::stof(parts[5]);
+		float size= std::stof(parts[6]);
+		Vector3 vel;
+		vel.x= std::stof(parts[7]);
+		vel.y= std::stof(parts[8]);
+		vel.z= std::stof(parts[9]);
+		if(ecswan->m_entities[id]->AddComponent(std::make_shared<TransformComponent>( pos, size, vel ))){
+			logs.push_back("updated entity with id: " + parts[1]);
+		}
+		else{
+			logs.push_back("[X] Couldn't find entity with id: " + parts[1]);
+		}
 	}
 }

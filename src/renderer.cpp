@@ -1,12 +1,24 @@
 #include "renderer.h"
 
-// auto dd_settings= std::make_shared<DropDown>("Settings", 0, 3);
-// auto dd_scenes= std::make_shared<DropDown>("Scenes", 0, 3);
-// auto dd_themes= std::make_shared<DropDown>("Themes", 0, 3);
+ECSwan *g_ecswan;
 
 auto drawSceneFunc= [](Camera3D& cam){
 	DrawGrid(20, 2.0f);
-	DrawCube( (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
+	DrawCube( (Vector3){0.0f, 0.5f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
+
+	static bool is_up= true;
+	static unsigned char a= 0;
+	if(a>= 255) is_up= false;
+	if(a<= 0)	is_up= true;
+	if(is_up) a++;
+	else	  a--;
+
+	for(auto entity: g_ecswan->m_entities){
+		if(entity->GetComponent<TransformComponent>()){
+			float s= entity->GetComponent<TransformComponent>()->m_size;
+			DrawCube(entity->GetComponent<TransformComponent>()->m_position, s, s, s, (Color){ (unsigned char)(255 -a), 255, a, 255} );
+		}
+	}
 };
 
 Camera3D playerCamera= {0};
@@ -35,6 +47,24 @@ SwanGui Renderer::InitGui(Font font){
 	Vector2 p_listPos= {86, 1};
 	Vector2 p_listSize= {10, 52};
 	auto p_list= std::make_shared<Panel>("ELEMENT LIST", p_listPos, p_listSize, font);
+	p_list->addElement(std::make_shared<Button>("Create Entity", [](){ g_ecswan->CreateEntity(); }, false));
+	static int ent_id;
+	p_list->addElement(std::make_shared<Slider>("Selected Entity", ent_id, 1, 0, 100));
+	static int ent_posx;
+	static int ent_posy;
+	static int ent_posz;
+	p_list->addElement(std::make_shared<Slider>("Entity pos x", ent_posx, 1, -20, 20));
+	p_list->addElement(std::make_shared<Slider>("Entity pos y", ent_posy, 1, -20, 20));
+	p_list->addElement(std::make_shared<Slider>("Entity pos z", ent_posz, 1, -20, 20));
+	static int ent_size;
+	p_list->addElement(std::make_shared<Slider>("Entity size", ent_size, 1, -20, 20));
+	static Vector3 ent_vel;
+	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( 
+		(Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
+
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 38};
@@ -104,10 +134,6 @@ void Renderer::RenderGui(SwanGui &swanGui, DeveloperConsole &developerConsole){
 	if(IsKeyPressed(KEY_ESCAPE) && developerConsole.GetIsEnabled()){
 		developerConsole.Exit();
 	}
-
-	// dd_settings->PrintDimensions();
-	// dd_scenes->PrintDimensions();
-	// dd_themes->PrintDimensions();
-
+	g_ecswan= ecswan;
 	swanGui.Draw();
 }

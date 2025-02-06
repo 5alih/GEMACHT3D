@@ -15,11 +15,11 @@ public:
 	std::vector<std::function<void()>> executers;
 	int possibleCommandIndex;
 	int scrollAmounth;
-	ECS *ecs;
+	ECSwan *ecswan;
 	std::vector<std::string> logs;
 
 	void UpdateConsole();
-	void Initialize(ECS &ecs);
+	void Initialize();
 	void Start();
 	void Exit();
 	void OnOff();
@@ -37,6 +37,7 @@ public:
 	void CreateEntity_exec();
 	void DeleteEntity_exec();
 	void ListEntities_exec();
+	void AddComponent_exec();
 	void RunScript_exec();
 	void Echo_exec();
 };

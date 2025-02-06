@@ -5,17 +5,14 @@
 #include "ecs.h"
 #include "console.h"
 #include "renderer.h"
-#include "input.h"
 
 class CoreEngine{
 public:
 	ECS ecs;
 	DeveloperConsole developerConsole;
 	Renderer renderer;
-	Input input;
-
-	Font engine_font;
 	SwanGui swanGui;
+	Font engine_font;
 
 	void Initialize();
 	void Run();

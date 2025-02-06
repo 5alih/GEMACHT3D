@@ -8,17 +8,20 @@ void CoreEngine::Initialize(){
 	SetTargetFPS(144);
 	static Image iconpng= LoadImage("resource/image/gelbox.png");
 	SetWindowIcon(iconpng);
-	ecs.Initialize();
-	developerConsole.Initialize(ecs);
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
+	renderer.ecswan= &ecs.ecswan;
+	developerConsole.ecswan= &ecs.ecswan;
+
+	ecs.InitECS(20.0f);
     swanGui= renderer.InitGui(engine_font);
+	developerConsole.Initialize();
 }
 
 void CoreEngine::Run(){
 	while(!WindowShouldClose()){
-		input.HandleInput(); //imposter
-		ecs.Update();
+		float deltaTime= GetFrameTime();
+		ecs.Update(deltaTime);
 		developerConsole.UpdateConsole();
 
 		BeginDrawing();
@@ -36,6 +39,4 @@ void CoreEngine::Shutdown(){
 	CloseWindow();
 }
 
-// test and see if ECS really works
-// connect ECS with renderer
-// change CameraView3D to use level data instead
+// add component managment commands to console
