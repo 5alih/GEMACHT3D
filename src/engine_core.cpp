@@ -40,4 +40,5 @@ void CoreEngine::Shutdown(){
 }
 
 // add component data editing
+// add editComponent command to console
 // add memory safety checks to swanGui
