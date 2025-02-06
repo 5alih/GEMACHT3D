@@ -1,12 +1,23 @@
 #include "renderer.h"
 
-// auto dd_settings= std::make_shared<DropDown>("Settings", 0, 3);
-// auto dd_scenes= std::make_shared<DropDown>("Scenes", 0, 3);
-// auto dd_themes= std::make_shared<DropDown>("Themes", 0, 3);
+ECSwan *g_ecswan;
 
 auto drawSceneFunc= [](Camera3D& cam){
 	DrawGrid(20, 2.0f);
 	DrawCube( (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
+
+	static bool is_up= true;
+	static unsigned char a= 0;
+	if(a>= 255) is_up= false;
+	if(a<= 0)	is_up= true;
+	if(is_up) a++;
+	else	  a--;
+
+	for(auto entity: g_ecswan->m_entities){
+		if(entity->GetComponent<TransformComponent>()){
+			DrawCube(entity->GetComponent<TransformComponent>()->m_position, 1, 1, 1, (Color){ (unsigned char)(255 -a), 0, a, 255} );
+		}
+	}
 };
 
 Camera3D playerCamera= {0};
@@ -104,10 +115,6 @@ void Renderer::RenderGui(SwanGui &swanGui, DeveloperConsole &developerConsole){
 	if(IsKeyPressed(KEY_ESCAPE) && developerConsole.GetIsEnabled()){
 		developerConsole.Exit();
 	}
-
-	// dd_settings->PrintDimensions();
-	// dd_scenes->PrintDimensions();
-	// dd_themes->PrintDimensions();
-
+	g_ecswan= ecswan;
 	swanGui.Draw();
 }

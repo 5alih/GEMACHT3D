@@ -6,9 +6,9 @@
 
 class ECS{
 public:
-	ECSwan ecs;
+	ECSwan ecswan;
 
-	ECSwan InitECS(float tick_rate);
+	void InitECS(float tick_rate);
 	void Update(float deltaTime);
 };
 

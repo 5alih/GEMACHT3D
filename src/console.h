@@ -2,7 +2,7 @@
 #define CONSOLE_H
 
 #include "my_functions.h"
-#include "ECSwan.h"
+#include "ecs.h"
 
 class DeveloperConsole{
 public:
@@ -15,11 +15,11 @@ public:
 	std::vector<std::function<void()>> executers;
 	int possibleCommandIndex;
 	int scrollAmounth;
-	ECSwan *ecs;
+	ECSwan *ecswan;
 	std::vector<std::string> logs;
 
 	void UpdateConsole();
-	void Initialize(ECSwan &ecs);
+	void Initialize();
 	void Start();
 	void Exit();
 	void OnOff();

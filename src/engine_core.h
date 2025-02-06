@@ -9,7 +9,6 @@
 class CoreEngine{
 public:
 	ECS ecs;
-	ECSwan ecswan;
 	DeveloperConsole developerConsole;
 	Renderer renderer;
 	SwanGui swanGui;

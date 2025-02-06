@@ -10,9 +10,12 @@ void CoreEngine::Initialize(){
 	SetWindowIcon(iconpng);
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
+	renderer.ecswan= &ecs.ecswan;
+	developerConsole.ecswan= &ecs.ecswan;
+
+	ecs.InitECS(0.0f);
     swanGui= renderer.InitGui(engine_font);
-	ecswan= ecs.InitECS(1.0f); 
-	developerConsole.Initialize(ecswan);
+	developerConsole.Initialize();
 }
 
 void CoreEngine::Run(){
@@ -35,6 +38,3 @@ void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
 }
-
-// connect ECS with renderer
-// change CameraView3D to use level data instead

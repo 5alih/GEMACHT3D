@@ -21,7 +21,7 @@ public:
 	Vector3 m_position;
 	float m_size;
 	Vector3 m_velocity;
-	const float m_min_velocity= 0.001f;
+	const float m_min_velocity= 0.000001f;
 
 	TransformComponent(Vector3 position, float size, Vector3 velocity){
 		m_position= position;
@@ -96,6 +96,10 @@ public:
 	ECSwan(){} // updates every frame
 
 	ECSwan(float tick_rate){
+		if(tick_rate== 0){
+			m_tick_rate= 0;
+			return;
+		}
 		m_tick_rate= 1.0f/tick_rate;
 	}
 

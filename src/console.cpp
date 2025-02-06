@@ -7,16 +7,13 @@
 
 #define FONT_SIZE 14
 
-void DeveloperConsole::Initialize(ECSwan &ecs_){
+void DeveloperConsole::Initialize(){
 	isEnabled= false;
 	possibleCommands= {};
 	possibleCommandIndex= 0;
 	logs.push_back("Developer Console Started");
 	consoleFont= LoadFontEx("resource/font/JetBrainsMono-Regular.ttf", FONT_SIZE, 0, 0);
 	scrollAmounth= 0;
-
-	ecs= &ecs_;
-
 	//________________________________________________________________ COMMANDS _________________________________________________________________
 
 	allCommands= {
@@ -235,7 +232,7 @@ void DeveloperConsole::Quit_exec(){				// "Quit"
 }
 
 void DeveloperConsole::CreateEntity_exec(){		// "CreateEntity"
-	auto entity= ecs->CreateEntity();
+	auto entity= ecswan->CreateEntity();
 	logs.push_back("Created entity with id: " + to_string(entity->m_id));
 }
 
@@ -250,7 +247,7 @@ void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 		return;
 	}
 	int id= std::stoi(parts[1]);
-	if(ecs->DeleteEntity(id)){
+	if(ecswan->DeleteEntity(id)){
 		logs.push_back("Deleted entity with id: " + parts[1]);
 	}
 	else{
@@ -260,7 +257,7 @@ void DeveloperConsole::DeleteEntity_exec(){		// "DeleteEntity (int)"
 
 void DeveloperConsole::ListEntities_exec(){		// "ListEntities"
 	logs.push_back("List of entities: ");
-	for(int i= 0; i< (int)ecs->m_entities.size(); i++){
-		logs.push_back(to_string(ecs->m_entities[i]->m_id));
+	for(int i= 0; i< (int)ecswan->m_entities.size(); i++){
+		logs.push_back(to_string(ecswan->m_entities[i]->m_id));
 	}
 }
