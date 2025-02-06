@@ -38,3 +38,28 @@ void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
 }
+
+// TODO
+// add level grid
+// add block placing/removing
+// add textures using GPU texture arrays
+// add mesh creation
+// add aplha shader
+// add greedy meshing
+// add enabling/disabling editor ui
+// add dynamic blocks with ECS
+// add ambient occulision
+// add basic lighting
+// add dynamic lighting
+// add wavy foliage
+// implement scene system
+// implement block editor
+// add scene for block editor
+// add behavior trees
+// add behavior tree editor
+// add scene for behavior tree editor
+// add behavior tree component for ECS
+// add some basic AI behaviors
+// connect ECS and Behavior tree
+// add actor editor
+// add scene for actor editor 
