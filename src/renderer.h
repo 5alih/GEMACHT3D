@@ -5,7 +5,7 @@
 #include "console.h"
 #include "swanGUI.h"
 
-class Renderer {
+class Renderer{
 public:
 	std::shared_ptr<Panel> p_console;
 

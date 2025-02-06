@@ -90,8 +90,14 @@ class ECSwan{
 public:
 	std::vector<std::shared_ptr<Entity>> m_entities;
 	int m_entity_id= 0;
+	float m_tick_rate= 0;
+	float m_tick_counter= 0;
 
-	ECSwan(){}
+	ECSwan(){} // updates every frame
+
+	ECSwan(float tick_rate){
+		m_tick_rate= 1.0f/tick_rate;
+	}
 
 	std::shared_ptr<Entity> CreateEntity(){
 		auto entity= std::make_shared<Entity>(m_entity_id++);
@@ -116,10 +122,22 @@ public:
 		return false;
 	}
 
-	void Update(){
-		for(auto &entity: m_entities){
-			entity->Update();
+	bool Update(float deltaTime){
+		if(m_tick_rate== 0){
+			for(auto &entity: m_entities){
+				entity->Update();
+			}
+			return true;
 		}
+		m_tick_counter+= deltaTime;
+		if(m_tick_counter>= m_tick_rate){
+			for(auto &entity: m_entities){
+				entity->Update();
+			}
+			m_tick_counter-= m_tick_rate;
+			return true;
+		}
+		return false;
 	}
 };
 
