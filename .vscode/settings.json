@@ -7,5 +7,7 @@
 		"**/.DS_Store": true,
 		"**/*.o": true,
 		"**/*.exe": true,
-	}
+	},
+	"github.copilot.editor.enableAutoCompletions": false,
+	"github.copilot.chat.completionContext.typescript.mode": "off"
 }

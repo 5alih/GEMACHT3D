@@ -4,7 +4,7 @@ ECSwan *g_ecswan;
 
 auto drawSceneFunc= [](Camera3D& cam){
 	DrawGrid(20, 2.0f);
-	DrawCube( (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
+	DrawCube( (Vector3){0.0f, 0.5f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
 
 	static bool is_up= true;
 	static unsigned char a= 0;
@@ -15,7 +15,8 @@ auto drawSceneFunc= [](Camera3D& cam){
 
 	for(auto entity: g_ecswan->m_entities){
 		if(entity->GetComponent<TransformComponent>()){
-			DrawCube(entity->GetComponent<TransformComponent>()->m_position, 1, 1, 1, (Color){ (unsigned char)(255 -a), 0, a, 255} );
+			float s= entity->GetComponent<TransformComponent>()->m_size;
+			DrawCube(entity->GetComponent<TransformComponent>()->m_position, s, s, s, (Color){ (unsigned char)(255 -a), 255, a, 255} );
 		}
 	}
 };
@@ -46,6 +47,24 @@ SwanGui Renderer::InitGui(Font font){
 	Vector2 p_listPos= {86, 1};
 	Vector2 p_listSize= {10, 52};
 	auto p_list= std::make_shared<Panel>("ELEMENT LIST", p_listPos, p_listSize, font);
+	p_list->addElement(std::make_shared<Button>("Create Entity", [](){ g_ecswan->CreateEntity(); }, false));
+	static int ent_id;
+	p_list->addElement(std::make_shared<Slider>("Selected Entity", ent_id, 1, 0, 100));
+	static int ent_posx;
+	static int ent_posy;
+	static int ent_posz;
+	p_list->addElement(std::make_shared<Slider>("Entity pos x", ent_posx, 1, -20, 20));
+	p_list->addElement(std::make_shared<Slider>("Entity pos y", ent_posy, 1, -20, 20));
+	p_list->addElement(std::make_shared<Slider>("Entity pos z", ent_posz, 1, -20, 20));
+	static int ent_size;
+	p_list->addElement(std::make_shared<Slider>("Entity size", ent_size, 1, -20, 20));
+	static Vector3 ent_vel;
+	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( 
+		(Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
+
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 38};

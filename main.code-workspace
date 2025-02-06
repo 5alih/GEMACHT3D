@@ -106,6 +106,20 @@
 		"git.autoRepositoryDetection": false,
 		"git.enabled": true,
         "editor.detectIndentation": false,
-        "editor.insertSpaces": false
+		"editor.insertSpaces": false,
+		"github.copilot.chat.edits.suggestRelatedFilesForTests": false,
+		"github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
+		"github.copilot.chat.setupTests.enabled": false,
+		"github.copilot.chat.copilotDebugCommand.enabled": false,
+		"github.copilot.chat.codeGeneration.useInstructionFiles": false,
+		"github.copilot.chat.reviewSelection.enabled": false,
+		"github.copilot.chat.startDebugging.enabled": false,
+		"github.copilot.chat.fixTestFailure.enabled": false,
+		"github.copilot.renameSuggestions.triggerAutomatically": false,
+		"github.copilot.chat.useProjectTemplates": false,
+		"github.copilot.editor.enableCodeActions": false,
+		"github.copilot.editor.enableAutoCompletions": false,
+		"chat.commandCenter.enabled": false,
+		"github.copilot.advanced": {}
 	}
 }

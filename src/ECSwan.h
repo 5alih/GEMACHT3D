@@ -65,13 +65,15 @@ public:
 	}
 
 	template <typename T>
-	void AddComponent(std::shared_ptr<T> component){
+	bool AddComponent(std::shared_ptr<T> component){
 		static_assert(std::is_base_of<Component, T>::value, "Element must derive from Component");
 
 		auto it= std::find(m_components.begin(), m_components.end(), component);
 		if(it== m_components.end()){
 			m_components.push_back(component);
+			return true;
 		}
+		return false;
 	}
 
 	template <typename T>
@@ -93,7 +95,7 @@ public:
 	float m_tick_rate= 0;
 	float m_tick_counter= 0;
 
-	ECSwan(){} // updates every frame
+	ECSwan(){}
 
 	ECSwan(float tick_rate){
 		if(tick_rate== 0){

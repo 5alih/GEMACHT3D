@@ -13,7 +13,7 @@ void CoreEngine::Initialize(){
 	renderer.ecswan= &ecs.ecswan;
 	developerConsole.ecswan= &ecs.ecswan;
 
-	ecs.InitECS(0.0f);
+	ecs.InitECS(20.0f);
     swanGui= renderer.InitGui(engine_font);
 	developerConsole.Initialize();
 }
@@ -38,3 +38,5 @@ void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
 }
+
+// add component managment commands to console

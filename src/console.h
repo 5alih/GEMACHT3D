@@ -37,6 +37,7 @@ public:
 	void CreateEntity_exec();
 	void DeleteEntity_exec();
 	void ListEntities_exec();
+	void AddComponent_exec();
 	void RunScript_exec();
 	void Echo_exec();
 };
