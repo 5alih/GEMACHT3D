@@ -38,5 +38,3 @@ void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
 }
-
-// add component managment commands to console

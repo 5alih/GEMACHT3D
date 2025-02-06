@@ -67,13 +67,14 @@ public:
 	template <typename T>
 	bool AddComponent(std::shared_ptr<T> component){
 		static_assert(std::is_base_of<Component, T>::value, "Element must derive from Component");
-
-		auto it= std::find(m_components.begin(), m_components.end(), component);
-		if(it== m_components.end()){
-			m_components.push_back(component);
-			return true;
+		for(auto it= m_components.begin(); it!= m_components.end(); ++it){
+			if(std::dynamic_pointer_cast<T>(*it)){
+				*it= component;
+				return true;
+			}
 		}
-		return false;
+		m_components.push_back(component);
+		return true;
 	}
 
 	template <typename T>

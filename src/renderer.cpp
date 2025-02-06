@@ -62,8 +62,7 @@ SwanGui Renderer::InitGui(Font font){
 	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.1f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.1f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.1f, -20.0f, 20.0f));
-	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( 
-		(Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
+	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( (Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
 
 	swanGui.AddPanel(p_list);
 
