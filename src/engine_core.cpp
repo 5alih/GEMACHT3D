@@ -38,7 +38,3 @@ void CoreEngine::Shutdown(){
 	UnloadFont(engine_font);
 	CloseWindow();
 }
-
-// add component data editing
-// add editComponent command to console
-// add memory safety checks to swanGui
