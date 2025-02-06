@@ -39,4 +39,5 @@ void CoreEngine::Shutdown(){
 	CloseWindow();
 }
 
+// add component data editing
 // add memory safety checks to swanGui
