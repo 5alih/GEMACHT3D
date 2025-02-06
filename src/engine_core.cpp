@@ -39,4 +39,4 @@ void CoreEngine::Shutdown(){
 	CloseWindow();
 }
 
-// add component managment commands to console
+// add memory safety checks to swanGui
