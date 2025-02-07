@@ -49,7 +49,7 @@ void CoreEngine::Shutdown(){
 }
 
 // TODO
-// level grid
+// X level grid
 // block placing/removing
 // textures using GPU texture arrays
 // mesh creation
@@ -62,15 +62,15 @@ void CoreEngine::Shutdown(){
 // basic lighting
 // dynamic lighting
 // wavy foliage
-// scene system
-// move swangui initilization to scene master
-// block editor
+// X scene system
+// X move swangui initilization to scene master
 // scene for block editor
+// block editor
 // behavior trees
-// behavior tree editor
 // scene for behavior tree editor
+// behavior tree editor
 // behavior tree component for ECS
 // some basic AI behaviors
 // ECS and Behavior tree connection
-// actor editor
 // scene for actor editor 
+// actor editor
