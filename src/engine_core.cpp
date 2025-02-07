@@ -14,7 +14,8 @@ void CoreEngine::Initialize(){
 	sceneMaster.ecswan= &ecs.ecswan;
 
 	ecs.InitECS(20.0f);
-    swanGui= sceneMaster.InitGui(engine_font);
+	sceneMaster.InitGui(engine_font);
+	swanGui= sceneMaster.GetGui("level_editor");
 	developerConsole.Initialize();
 	
 	levelMaster.developerConsole= &developerConsole;

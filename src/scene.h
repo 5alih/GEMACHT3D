@@ -7,21 +7,27 @@
 
 class Scene{
 public:
-	SwanGui gui;
+	SwanGui m_gui;
 
 	Scene(){}
+
+	Scene(SwanGui gui){
+		m_gui= gui;
+	}
 };
 
 class SceneMaster{
 public:
-	int m_current_scene;
+	int m_current_scene= 0;
 	std::vector<Scene> m_scenes;
 	std::shared_ptr<Panel> p_console;
 	ECSwan *ecswan;
 
 	SceneMaster(){}
 
-	SwanGui InitGui(Font font);
+	void InitGui(Font font);
+
+	SwanGui GetGui(std::string scene_name);
 };
 
 #endif // SCENE_H

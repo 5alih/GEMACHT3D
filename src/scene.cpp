@@ -23,7 +23,7 @@ auto drawSceneFunc= [](Camera3D& cam){
 
 Camera3D playerCamera= {0};
 
-SwanGui SceneMaster::InitGui(Font font){
+void SceneMaster::InitGui(Font font){
 	SwanGui swanGui;
 	g_ecswan= ecswan;
 
@@ -56,9 +56,9 @@ SwanGui SceneMaster::InitGui(Font font){
 	static int ent_size;
 	p_list->addElement(std::make_shared<Slider>("Entity size", ent_size, 1, -20, 20));
 	static Vector3 ent_vel;
-	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.1f, -20.0f, 20.0f));
-	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.1f, -20.0f, 20.0f));
-	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.01f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.01f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( (Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
 	// p_list->addElement(std::make_shared<Slider>("Current Level", levelMaster->m_current_level, 1));
 	swanGui.AddPanel(p_list);
@@ -119,5 +119,13 @@ SwanGui SceneMaster::InitGui(Font font){
 
 	swanGui.AddPanel(p_top);
 
-	return swanGui;
+	Scene scene(swanGui);
+	m_scenes.push_back(scene);
+}
+
+SwanGui SceneMaster::GetGui(std::string scene_name){
+	if(scene_name== "level_editor")	return m_scenes[0].m_gui;
+	if(scene_name== "block_editor")	return m_scenes[1].m_gui;
+	if(scene_name== "actor_editor")	return m_scenes[2].m_gui;
+	return m_scenes[3].m_gui;
 }
