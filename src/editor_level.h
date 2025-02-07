@@ -24,28 +24,11 @@ inline auto drawSceneFunc= [](Camera3D& cam){
 			DrawCube(entity->GetComponent<TransformComponent>()->m_position, s, s, s, (Color){ (unsigned char)(255 -a), 255, a, 255} );
 		}
 	}
-	static bool is= true;
-	if(is){
-		Level lvl(10, 10, 10);
-		for(int x= 0; x< lvl.m_width; x++){
-			for(int y= 0; y< lvl.m_height; y++){
-				for(int z= 0; z< lvl.m_depth; z++){
-					if(x%2== 0 && y%5== 0 && z%3== 0)
-						lvl.m_blocks[x][y][z].m_texture_id= 1;
-				}
-			}
-		}
-		g_levelMaster->AddLevel(lvl);
-		is= false;
-	}
-
 	static Level *lvl= &g_levelMaster->m_levels[0];
 	for(int x= 0; x< lvl->m_width; x++){
 		for(int y= 0; y< lvl->m_height; y++){
 			for(int z= 0; z< lvl->m_depth; z++){
-				if(lvl->m_blocks[x][y][z].m_texture_id!= 0){
-					DrawCube( (Vector3){(float)x, (float)y, (float)z}, 1.0f, 1.0f, 1.0f, RED );
-				}
+				DrawCube( (Vector3){(float)x, (float)y, (float)z}, 0.5f, 0.5f, 0.5f, BLUE );
 			}
 		}
 	}

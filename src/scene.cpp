@@ -1,6 +1,7 @@
 #include "scene.h"
 
 inline ECSwan *g_ecswan;
+inline LevelMaster *g_levelMaster;
 
 void SceneMaster::InitGui(Font font){
 	SwanGui swanGui;
@@ -20,19 +21,18 @@ void SceneMaster::InitGui(Font font){
 	p_list->addElement(std::make_shared<Button>("Create Entity", [](){ g_ecswan->CreateEntity(); }, false));
 	static int ent_id;
 	p_list->addElement(std::make_shared<Slider>("Selected Entity", ent_id, 1, 0, 100));
-	static int ent_posx;
-	static int ent_posy;
-	static int ent_posz;
-	p_list->addElement(std::make_shared<Slider>("Entity pos x", ent_posx, 1, -20, 20));
-	p_list->addElement(std::make_shared<Slider>("Entity pos y", ent_posy, 1, -20, 20));
-	p_list->addElement(std::make_shared<Slider>("Entity pos z", ent_posz, 1, -20, 20));
+	static Vector3 ent_pos;
+	p_list->addElement(std::make_shared<SliderF>("Entity pos x", ent_pos.x, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity pos y", ent_pos.y, 0.1f, -20.0f, 20.0f));
+	p_list->addElement(std::make_shared<SliderF>("Entity pos z", ent_pos.z, 0.1f, -20.0f, 20.0f));
 	static int ent_size;
 	p_list->addElement(std::make_shared<Slider>("Entity size", ent_size, 1, -20, 20));
 	static Vector3 ent_vel;
 	p_list->addElement(std::make_shared<SliderF>("Entity vel x", ent_vel.x, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.01f, -20.0f, 20.0f));
-	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( (Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
+	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>(ent_pos, (float)ent_size, ent_vel)); }));
+	p_list->addElement(std::make_shared<Button>("Save Level", [](){ g_levelMaster->SaveLevel(0); }, true));
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 38};

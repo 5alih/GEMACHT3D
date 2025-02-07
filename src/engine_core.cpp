@@ -15,7 +15,9 @@ void CoreEngine::Initialize(){
 	ecs.InitECS(20.0f);
 	sceneMaster.InitGui(engine_font);
 	developerConsole.Initialize();
-	levelMaster.developerConsole= &developerConsole;	
+	levelMaster.developerConsole= &developerConsole;
+	levelMaster.InitLvl();
+	sceneMaster.levelMaster= &levelMaster;
 	levelEditor.levelMaster= &levelMaster;
 
 	renderer.p_console= &sceneMaster.p_console;
@@ -37,7 +39,6 @@ void CoreEngine::Run(){
 		renderer.RenderGui(swanGui, developerConsole);
 		renderer.RenderFPS(WHITE);
 		developerConsole.RenderLog();
-
 		EndDrawing();
 	}
 }

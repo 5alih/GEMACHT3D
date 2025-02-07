@@ -23,6 +23,7 @@ public:
 	std::vector<Scene> m_scenes;
 	std::shared_ptr<Panel> p_console;
 	ECSwan *ecswan;
+	LevelMaster *levelMaster;
 
 	SceneMaster(){}
 

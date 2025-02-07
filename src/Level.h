@@ -21,6 +21,7 @@ public:
 	int m_height;
 	int m_depth;
 	std::vector<std::vector<std::vector<Block>>> m_blocks;
+	int m_id;
 
 	Level(){}
 
@@ -67,6 +68,8 @@ public:
 		}
 		return !already_exist;
 	}
+
+	void InitLvl();
 
 	void AddLevel(Level level);
 

@@ -1,12 +1,23 @@
 #include "Level.h"
 #include <fstream>
 
-void LevelMaster::AddLevel(Level level){
+void LevelMaster::InitLvl(){
+	LoadLevel(0);
+}
+
+void LevelMaster::AddLevel(Level level)
+{
 	m_levels.push_back(level);
 }
 
 void LevelMaster::LoadLevel(int id)
 {
+	for(auto lvl: m_levels){
+		if(lvl.m_id== id){
+			developerConsole->PrintError(cat_2string("Level already loaded: ", to_string(id)));
+			return;
+		}
+	}
 	std::ostringstream oss;
 	oss<< "resource/levels/"<< id<< ".txt";
 	std::string filepath= oss.str();
@@ -30,6 +41,7 @@ void LevelMaster::LoadLevel(int id)
 			}
 		}
 	}
+	m_levels.push_back(level);
 	file.close();
 }
 
@@ -48,15 +60,16 @@ void LevelMaster::SaveLevel(int id){
 		}
 		return;
 	}
-	file<< m_levels[id].m_width;
-	file<< m_levels[id].m_height;
-	file<< m_levels[id].m_depth;
-
+	file<< m_levels[id].m_width<< " ";
+	file<< m_levels[id].m_height<< " ";
+	file<< m_levels[id].m_depth<< " ";
+	file<< "\n";
 	for(int x= 0; x<m_levels[id].m_width; x++){ // storing all the blocks for now, will compress later by stacking same blocks: 1 1 1 1 8 8 -> 4:1 2:8 
 		for(int y= 0; y<m_levels[id].m_height; y++){
 			for(int z= 0; z<m_levels[id].m_depth; z++){
 				Block block(m_levels[id].m_blocks[x][y][z].m_texture_id);
 				file<< block.m_texture_id;
+				file<< " ";
 			}
 		}
 	}
