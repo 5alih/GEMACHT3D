@@ -4,7 +4,8 @@
 #include "scene.h"
 
 inline ECSwan *g_ecswan;
-inline Camera3D playerCamera= {0};
+inline Camera3D viewportCamera= {0};
+inline Camera3D previewCamera= {0};
 inline LevelMaster *g_levelMaster;
 
 inline auto drawSceneFunc= [](Camera3D& cam){
@@ -32,6 +33,8 @@ inline auto drawSceneFunc= [](Camera3D& cam){
 			}
 		}
 	}
+	DrawCube(viewportCamera.position, 1.0f, 1.0f, 1.0f, BLACK);
+	DrawCube(previewCamera.position, 1.0f, 1.0f, 1.0f, WHITE);
 };
 
 class LevelEditor{
@@ -47,25 +50,35 @@ public:
 		g_ecswan= ecswan;
 		g_levelMaster= levelMaster;
 
-		playerCamera.position= {0.0f, 2.0f, 4.0f};
-		playerCamera.target= {0.0f, 2.0f, 0.0f};
-		playerCamera.up= {0.0f, 1.0f, 0.0f};
-		playerCamera.fovy= 60.0f;
-		playerCamera.projection= CAMERA_PERSPECTIVE;
+		viewportCamera.position= {0.0f, 2.0f, 4.0f};
+		viewportCamera.target= {0.0f, 2.0f, 0.0f};
+		viewportCamera.up= {0.0f, 1.0f, 0.0f};
+		viewportCamera.fovy= 60.0f;
+		viewportCamera.projection= CAMERA_PERSPECTIVE;
+
+		previewCamera.position= {0.0f, 2.0f, 4.0f};
+		previewCamera.target= {0.0f, 2.0f, 0.0f};
+		previewCamera.up= {0.0f, 1.0f, 0.0f};
+		previewCamera.fovy= 60.0f;
+		previewCamera.projection= CAMERA_PERSPECTIVE;
 
 		swanGui= &(sceneMaster->m_scenes[0].m_gui);
 
 		Vector2 p_viewportPos= {0, 1};
 		Vector2 p_viewportSize= {64, 37};
 		auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, false, 1, font);
-		p_viewport->addElement(std::make_shared<CameraView3DFill>(playerCamera, drawSceneFunc, ui_panel_body));
+		p_viewport->addElement(std::make_shared<CameraView3DFill>(viewportCamera, drawSceneFunc, ui_panel_body));
 		swanGui->AddPanel(p_viewport);
 	
 		Vector2 p_previewPos= {64, 1};
 		Vector2 p_previewSize= {22, 18};
 		auto p_preview= std::make_shared<Panel>("PREVIEW", p_previewPos, p_previewSize, font);
-		p_preview->addElement(std::make_shared<CameraView3DFillBorder>(playerCamera, drawSceneFunc, ui_panel_body));
+		p_preview->addElement(std::make_shared<CameraView3DFillBorder>(previewCamera, drawSceneFunc, ui_panel_body));
 		swanGui->AddPanel(p_preview);
+	}
+
+	void Update(){
+		
 	}
 };
 
