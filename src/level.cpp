@@ -1,7 +1,12 @@
 #include "Level.h"
 #include <fstream>
 
-void LevelMaster::LoadLevel(int id){
+void LevelMaster::AddLevel(Level level){
+	m_levels.push_back(level);
+}
+
+void LevelMaster::LoadLevel(int id)
+{
 	std::ostringstream oss;
 	oss<< "resource/levels/"<< id<< ".txt";
 	std::string filepath= oss.str();
@@ -37,6 +42,12 @@ void LevelMaster::SaveLevel(int id){
 		developerConsole->PrintError(cat_2string("Error opening file: ", filepath));
 		return;
 	}
+	if(id< 0 || id>= (int)m_levels.size()){
+		if(developerConsole){
+			developerConsole->PrintError("Invalid level ID");
+		}
+		return;
+	}
 	file<< m_levels[id].m_width;
 	file<< m_levels[id].m_height;
 	file<< m_levels[id].m_depth;
@@ -50,4 +61,8 @@ void LevelMaster::SaveLevel(int id){
 		}
 	}
 	file.close();
+}
+
+Level& LevelMaster::GetCurrentLevel(){	// UNSAFE ASF
+	return m_levels[m_current_level];
 }

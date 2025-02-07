@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "Level.h"
 #include "scene.h"
+#include "editor_level.h"
 
 class CoreEngine{
 public:
@@ -17,6 +18,7 @@ public:
 	Font engine_font;
 	LevelMaster levelMaster;
 	SceneMaster sceneMaster;
+	LevelEditor levelEditor;
 
 	void Initialize();
 	void Run();

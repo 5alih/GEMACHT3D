@@ -4,6 +4,7 @@
 #include "my_functions.h"
 #include "swanGUI.h"
 #include "ECSwan.h"
+#include "level.h"
 
 class Scene{
 public:

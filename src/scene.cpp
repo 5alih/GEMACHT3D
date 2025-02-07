@@ -1,37 +1,10 @@
 #include "scene.h"
 
-ECSwan *g_ecswan;
-
-auto drawSceneFunc= [](Camera3D& cam){
-	DrawGrid(20, 2.0f);
-	DrawCube( (Vector3){0.0f, 0.5f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
-
-	static bool is_up= true;
-	static unsigned char a= 0;
-	if(a>= 255) is_up= false;
-	if(a<= 0)	is_up= true;
-	if(is_up) a++;
-	else	  a--;
-
-	for(auto entity: g_ecswan->m_entities){
-		if(entity->GetComponent<TransformComponent>()){
-			float s= entity->GetComponent<TransformComponent>()->m_size;
-			DrawCube(entity->GetComponent<TransformComponent>()->m_position, s, s, s, (Color){ (unsigned char)(255 -a), 255, a, 255} );
-		}
-	}
-};
-
-Camera3D playerCamera= {0};
+inline ECSwan *g_ecswan;
 
 void SceneMaster::InitGui(Font font){
 	SwanGui swanGui;
 	g_ecswan= ecswan;
-
-	playerCamera.position= {0.0f, 2.0f, 4.0f};
-	playerCamera.target= {0.0f, 2.0f, 0.0f};
-	playerCamera.up= {0.0f, 1.0f, 0.0f};
-	playerCamera.fovy= 60.0f;
-	playerCamera.projection= CAMERA_PERSPECTIVE;
 
 	Vector2 p_settingsPos= {64, 19};
 	Vector2 p_settingsSize= {22	, 35};
@@ -60,7 +33,6 @@ void SceneMaster::InitGui(Font font){
 	p_list->addElement(std::make_shared<SliderF>("Entity vel y", ent_vel.y, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>( (Vector3){(float)ent_posx, (float)ent_posy, (float)ent_posz}, (float)ent_size, ent_vel )); }));
-	// p_list->addElement(std::make_shared<Slider>("Current Level", levelMaster->m_current_level, 1));
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 38};
@@ -76,18 +48,6 @@ void SceneMaster::InitGui(Font font){
 	Vector2 p_consoleSize= {24, 15};
 	p_console= std::make_shared<Panel>("CONSOLE", p_consolePos, p_consoleSize, font);
 	swanGui.AddPanel(p_console);
-
-	Vector2 p_viewportPos= {0, 1};
-	Vector2 p_viewportSize= {64, 37};
-	auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, false, 1, font);
-	p_viewport->addElement(std::make_shared<CameraView3DFill>(playerCamera, drawSceneFunc, ui_panel_body));
-	swanGui.AddPanel(p_viewport);
-
-	Vector2 p_previewPos= {64, 1};
-	Vector2 p_previewSize= {22, 18};
-	auto p_preview= std::make_shared<Panel>("PREVIEW", p_previewPos, p_previewSize, font);
-	p_preview->addElement(std::make_shared<CameraView3DFillBorder>(playerCamera, drawSceneFunc, ui_panel_body));
-	swanGui.AddPanel(p_preview);
 
 	Vector2 p_topPos= {0, 0};
 	Vector2 p_topSize= {96, 1};
@@ -127,5 +87,6 @@ SwanGui SceneMaster::GetGui(std::string scene_name){
 	if(scene_name== "level_editor")	return m_scenes[0].m_gui;
 	if(scene_name== "block_editor")	return m_scenes[1].m_gui;
 	if(scene_name== "actor_editor")	return m_scenes[2].m_gui;
-	return m_scenes[3].m_gui;
+	SwanGui swangui;
+	return swangui;
 }

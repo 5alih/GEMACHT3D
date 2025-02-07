@@ -6,7 +6,7 @@
 
 class Block{
 public:
-	int m_texture_id;
+	int m_texture_id= 0;
 
 	Block(){}
 
@@ -30,6 +30,8 @@ public:
 		m_depth= depth;
 		m_blocks.resize(m_width, std::vector<std::vector<Block>>(m_height, std::vector<Block>(m_depth)));
 	}
+
+	
 };
 
 class LevelMaster{
@@ -66,9 +68,13 @@ public:
 		return !already_exist;
 	}
 
+	void AddLevel(Level level);
+
 	void LoadLevel(int id);
 	
 	void SaveLevel(int id);
+
+	Level& GetCurrentLevel();
 };
 
 #endif // LEVEL_H

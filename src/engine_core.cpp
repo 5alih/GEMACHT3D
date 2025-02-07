@@ -12,15 +12,18 @@ void CoreEngine::Initialize(){
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
 	developerConsole.ecswan= &ecs.ecswan;
 	sceneMaster.ecswan= &ecs.ecswan;
-
 	ecs.InitECS(20.0f);
 	sceneMaster.InitGui(engine_font);
-	swanGui= sceneMaster.GetGui("level_editor");
 	developerConsole.Initialize();
-	
-	levelMaster.developerConsole= &developerConsole;
+	levelMaster.developerConsole= &developerConsole;	
+	levelEditor.levelMaster= &levelMaster;
+
 	renderer.p_console= &sceneMaster.p_console;
-	renderer.levelMaster= &levelMaster;
+	levelEditor.sceneMaster= &sceneMaster;
+	levelEditor.ecswan= &ecs.ecswan;
+	
+	levelEditor.InitEditor(engine_font);
+	swanGui= sceneMaster.GetGui("level_editor");
 }
 
 void CoreEngine::Run(){
