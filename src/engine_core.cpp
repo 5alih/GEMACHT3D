@@ -16,6 +16,8 @@ void CoreEngine::Initialize(){
 	ecs.InitECS(20.0f);
     swanGui= renderer.InitGui(engine_font);
 	developerConsole.Initialize();
+	
+	levelMaster.developerConsole= &developerConsole;
 }
 
 void CoreEngine::Run(){
