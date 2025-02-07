@@ -133,6 +133,13 @@ void DeveloperConsole::ExecuteCommand(int commandId){
 	executers[commandId]();
 }
 
+void DeveloperConsole::PrintError(std::string error){
+	std::vector<std::string> result;
+	result.push_back("[@]");
+	result.push_back(error);
+	logs.push_back(cat_string(result, ' '));	
+}
+
 void DeveloperConsole::log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, int &scroll_length, std::string str){
 	int start= 0, i= 0;
 	int padding= size + (size/5);

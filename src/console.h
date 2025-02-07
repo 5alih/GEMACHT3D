@@ -27,6 +27,7 @@ public:
 	void GetInputString();
 	std::vector<std::string> GetPossibleCommands();
 	void ExecuteCommand(int commandId);
+	void PrintError(std::string error);
 
 	void log(std::vector<std::string> list, int x, int y, int size, Color listColor, Color strColor, int length, int &scroll_length, std::string str);
 	void RenderLog();
