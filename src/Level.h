@@ -37,6 +37,7 @@ public:
 	std::vector<Level> m_levels;
 	std::vector<Block> m_blocks;
 	DeveloperConsole *developerConsole;
+	int m_current_level= 0;
 
 	LevelMaster(){}
 

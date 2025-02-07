@@ -3,16 +3,15 @@
 
 #include "my_functions.h"
 #include "console.h"
-#include "ecs.h"
 #include "swanGUI.h"
+#include "level.h"
 
 class Renderer{
 public:
-	std::shared_ptr<Panel> p_console;
-	ECSwan *ecswan;
+	std::shared_ptr<Panel> *p_console;
+	LevelMaster *levelMaster;
 
 	void RenderFPS(Color color);
-	SwanGui InitGui(Font font);
 	void RenderGui(SwanGui &swanGui, DeveloperConsole &developerConsole);
 };
 

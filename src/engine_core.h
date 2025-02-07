@@ -6,6 +6,7 @@
 #include "console.h"
 #include "renderer.h"
 #include "Level.h"
+#include "scene.h"
 
 class CoreEngine{
 public:
@@ -15,6 +16,7 @@ public:
 	SwanGui swanGui;
 	Font engine_font;
 	LevelMaster levelMaster;
+	SceneMaster sceneMaster;
 
 	void Initialize();
 	void Run();

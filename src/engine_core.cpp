@@ -10,14 +10,16 @@ void CoreEngine::Initialize(){
 	SetWindowIcon(iconpng);
 
     engine_font= LoadFontEx("resource/font/source-sans-pro.bold.ttf", 14, 0, 0);
-	renderer.ecswan= &ecs.ecswan;
 	developerConsole.ecswan= &ecs.ecswan;
+	sceneMaster.ecswan= &ecs.ecswan;
 
 	ecs.InitECS(20.0f);
-    swanGui= renderer.InitGui(engine_font);
+    swanGui= sceneMaster.InitGui(engine_font);
 	developerConsole.Initialize();
 	
 	levelMaster.developerConsole= &developerConsole;
+	renderer.p_console= &sceneMaster.p_console;
+	renderer.levelMaster= &levelMaster;
 }
 
 void CoreEngine::Run(){
@@ -56,6 +58,7 @@ void CoreEngine::Shutdown(){
 // dynamic lighting
 // wavy foliage
 // scene system
+// move swangui initilization to scene master
 // block editor
 // scene for block editor
 // behavior trees
