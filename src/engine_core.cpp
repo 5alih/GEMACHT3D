@@ -40,26 +40,27 @@ void CoreEngine::Shutdown(){
 }
 
 // TODO
-// add level grid
-// add block placing/removing
-// add textures using GPU texture arrays
-// add mesh creation
-// add aplha shader
-// add greedy meshing
-// add enabling/disabling editor ui
-// add dynamic blocks with ECS
-// add ambient occulision
-// add basic lighting
-// add dynamic lighting
-// add wavy foliage
-// implement scene system
-// implement block editor
-// add scene for block editor
-// add behavior trees
-// add behavior tree editor
-// add scene for behavior tree editor
-// add behavior tree component for ECS
-// add some basic AI behaviors
-// connect ECS and Behavior tree
-// add actor editor
-// add scene for actor editor 
+// level grid
+// block placing/removing
+// textures using GPU texture arrays
+// mesh creation
+// player movement
+// aplha shader
+// greedy meshing
+// enabling/disabling editor ui
+// dynamic blocks with ECS
+// ambient occulision
+// basic lighting
+// dynamic lighting
+// wavy foliage
+// scene system
+// block editor
+// scene for block editor
+// behavior trees
+// behavior tree editor
+// scene for behavior tree editor
+// behavior tree component for ECS
+// some basic AI behaviors
+// ECS and Behavior tree connection
+// actor editor
+// scene for actor editor 
