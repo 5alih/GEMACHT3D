@@ -33,6 +33,7 @@ void SceneMaster::InitGui(Font font){
 	p_list->addElement(std::make_shared<SliderF>("Entity vel z", ent_vel.z, 0.01f, -20.0f, 20.0f));
 	p_list->addElement(std::make_shared<Button>("Add Transform", [](){ g_ecswan->m_entities[ent_id]->AddComponent(std::make_shared<TransformComponent>(ent_pos, (float)ent_size, ent_vel)); }));
 	p_list->addElement(std::make_shared<Button>("Save Level", [](){ g_levelMaster->SaveLevel(0); }, true));
+	p_list->addElement(std::make_shared<Slider>("Current Level", levelMaster->m_current_level, 1, 0, 20));
 	swanGui.AddPanel(p_list);
 
 	Vector2 p_bottomPos= {0, 38};

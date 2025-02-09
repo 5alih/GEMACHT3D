@@ -1,5 +1,7 @@
 #include "engine_core.h"
 
+#define FOR_ONCE(x) static bool is= true; if(is){ x; is= false; }
+
 void CoreEngine::Initialize(){
 	InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "GEMACHT 3D");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
@@ -17,6 +19,19 @@ void CoreEngine::Initialize(){
 	developerConsole.Initialize();
 	levelMaster.developerConsole= &developerConsole;
 	levelMaster.InitLvl();
+
+	// static Level lvl(10, 20, 10);
+	// for(int x= 0; x< lvl.m_width; x++){
+	// 	for(int y= 0; y< lvl.m_height; y++){
+	// 		for(int z= 0; z< lvl.m_depth; z++){
+	// 			if(y> 6 && y< 10){
+	// 				lvl.m_blocks[x][y][z].m_texture_id= 1;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// levelMaster.m_levels.push_back(lvl);
+
 	sceneMaster.levelMaster= &levelMaster;
 	levelEditor.levelMaster= &levelMaster;
 
@@ -34,11 +49,14 @@ void CoreEngine::Run(){
 		ecs.Update(deltaTime);
 		developerConsole.UpdateConsole();
 
+		// FOR_ONCE( levelMaster.SaveLevel(0) )
+
 		BeginDrawing();
     	ClearBackground(BLACK);
 		renderer.RenderGui(swanGui, developerConsole);
 		renderer.RenderFPS(WHITE);
 		developerConsole.RenderLog();
+		levelEditor.Update();
 		EndDrawing();
 	}
 }
@@ -49,8 +67,8 @@ void CoreEngine::Shutdown(){
 }
 
 // TODO
-// level grid
-// block placing/removing
+// X level grid
+// X block placing/removing
 // textures using GPU texture arrays
 // mesh creation
 // player movement
@@ -62,15 +80,15 @@ void CoreEngine::Shutdown(){
 // basic lighting
 // dynamic lighting
 // wavy foliage
-// scene system
-// move swangui initilization to scene master
-// block editor
+// X scene system
+// X move swangui initilization to scene master
 // scene for block editor
+// block editor
 // behavior trees
-// behavior tree editor
 // scene for behavior tree editor
+// behavior tree editor
 // behavior tree component for ECS
 // some basic AI behaviors
 // ECS and Behavior tree connection
-// actor editor
 // scene for actor editor 
+// actor editor
