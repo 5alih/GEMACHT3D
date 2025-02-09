@@ -711,7 +711,7 @@ public:
 			m_update_camera= true;
 			DisableCursor();
 		}
-		else if(m_update_camera && ((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE))){
+		else if(IsKeyPressed(KEY_ESCAPE)){
 			m_update_camera= false;
 			EnableCursor();
 		}
@@ -767,7 +767,7 @@ public:
 			m_update_camera= true;
 			DisableCursor();
 		}
-		else if(m_update_camera && ((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE))){
+		else if(IsKeyPressed(KEY_ESCAPE)){
 			m_update_camera= false;
 			EnableCursor();
 		}
@@ -823,7 +823,7 @@ public:
 			m_update_camera= true;
 			DisableCursor();
 		}
-		else if(m_update_camera && ((!IsMouseOver() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_ESCAPE))){
+		else if(IsKeyPressed(KEY_ESCAPE)){
 			m_update_camera= false;
 			EnableCursor();
 		}
