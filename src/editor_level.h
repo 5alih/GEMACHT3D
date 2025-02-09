@@ -89,7 +89,7 @@ public:
 
 	}
 	
-	Vector3 Raycast(Ray ray, int maxCalc){
+	Vector3 Raycast(Ray ray, int maxCalc, Vector3 &previous_block){
 		Vector3 deltaDist;
 		Vector3 step;
 		Vector3 tMax;
@@ -125,6 +125,10 @@ public:
 			if(lvl->m_blocks[x][y][z].m_texture_id!= 0)
 				return Vector3{(float)x, (float)y, (float)z};
 	
+			previous_block.x= x;
+			previous_block.y= y;
+			previous_block.z= z;
+
 			if(tMax.x< tMax.y && tMax.x< tMax.z){
 				ray.position.x+= step.x;
 				tMax.x+= deltaDist.x;
@@ -147,10 +151,15 @@ public:
 		Ray ray;
 		ray.position= viewportCamera.position;
 		ray.direction= Vector3Normalize(Vector3Subtract(viewportCamera.target, viewportCamera.position));
-		hitBlock= Raycast(ray, 100);
+
+		Vector3 preBlock= {-1, -1, -1};
+		hitBlock= Raycast(ray, 100, preBlock);
 
 		if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && hitBlock.x!= -1 && hitBlock.y!= -1 && hitBlock.z!= -1){
 			levelMaster->GetCurrentLevel().m_blocks[hitBlock.x][hitBlock.y][hitBlock.z].m_texture_id= 0;
+		}
+		else if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && preBlock.x!= -1 && preBlock.y!= -1 && preBlock.z!= -1){
+			levelMaster->GetCurrentLevel().m_blocks[preBlock.x][preBlock.y][preBlock.z].m_texture_id= 1;
 		}
 
 		DrawRectangle((g_panel->m_position.x + g_panel->m_size.x/2.0f) -6, (g_panel->m_position.y + g_panel->m_size.y/2.0f) -1, 4, 2, WHITE);
