@@ -66,21 +66,23 @@ void CoreEngine::Shutdown(){
 }
 
 // TODO
+// X scene system
+// X move swangui initilization to scene master
+// X scene for level editor
+// X level editor
 // X level grid
 // X block placing/removing
 // textures using GPU texture arrays
 // mesh creation
-// player movement
 // aplha shader
 // greedy meshing
 // enabling/disabling editor ui
+// player movement
 // dynamic blocks with ECS
 // ambient occulision
 // basic lighting
 // dynamic lighting
 // wavy foliage
-// X scene system
-// X move swangui initilization to scene master
 // scene for block editor
 // block editor
 // behavior trees
