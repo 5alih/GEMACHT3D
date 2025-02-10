@@ -20,11 +20,11 @@ void CoreEngine::Initialize(){
 	levelMaster.developerConsole= &developerConsole;
 	levelMaster.InitLvl();
 
-	// static Level lvl(10, 20, 10);
+	// static Level lvl(20, 20, 20);
 	// for(int x= 0; x< lvl.m_width; x++){
 	// 	for(int y= 0; y< lvl.m_height; y++){
 	// 		for(int z= 0; z< lvl.m_depth; z++){
-	// 			if(y> 6 && y< 10){
+	// 			if(y< 2){
 	// 				lvl.m_blocks[x][y][z].m_texture_id= 1;
 	// 			}
 	// 		}
@@ -48,7 +48,6 @@ void CoreEngine::Run(){
 		float deltaTime= GetFrameTime();
 		ecs.Update(deltaTime);
 		developerConsole.UpdateConsole();
-
 		// FOR_ONCE( levelMaster.SaveLevel(0) )
 
 		BeginDrawing();
@@ -67,21 +66,23 @@ void CoreEngine::Shutdown(){
 }
 
 // TODO
+// X scene system
+// X move swangui initilization to scene master
+// X scene for level editor
+// X level editor
 // X level grid
 // X block placing/removing
 // textures using GPU texture arrays
 // mesh creation
-// player movement
 // aplha shader
 // greedy meshing
 // enabling/disabling editor ui
+// player movement
 // dynamic blocks with ECS
 // ambient occulision
 // basic lighting
 // dynamic lighting
 // wavy foliage
-// X scene system
-// X move swangui initilization to scene master
 // scene for block editor
 // block editor
 // behavior trees

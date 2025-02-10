@@ -13,7 +13,6 @@ inline std::shared_ptr<Panel> g_panel;
 
 inline auto drawSceneFunc= [](Camera3D& cam){
 	DrawGrid(20, 2.0f);
-	DrawCube( (Vector3){0.0f, 0.5f, 0.0f}, 1.0f, 1.0f, 1.0f, (Color){243, 169, 78, 255} );
 
 	static bool is_up= true;
 	static unsigned char a= 0;
@@ -86,7 +85,6 @@ public:
 		swanGui->AddPanel(p_preview);
 
 		g_panel= p_viewport;
-
 	}
 	
 	Vector3 Raycast(Ray ray, int maxCalc, Vector3 &previous_block){
