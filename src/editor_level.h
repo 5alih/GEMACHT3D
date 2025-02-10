@@ -85,7 +85,6 @@ public:
 		swanGui->AddPanel(p_preview);
 
 		g_panel= p_viewport;
-
 	}
 	
 	Vector3 Raycast(Ray ray, int maxCalc, Vector3 &previous_block){
