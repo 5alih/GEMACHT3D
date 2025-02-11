@@ -50,35 +50,7 @@ void SceneMaster::InitGui(Font font){
 	p_console= std::make_shared<Panel>("CONSOLE", p_consolePos, p_consoleSize, font);
 	swanGui.AddPanel(p_console);
 
-	Vector2 p_topPos= {0, 0};
-	Vector2 p_topSize= {96, 1};
-	auto p_top= std::make_shared<Panel>("p_top", p_topPos, p_topSize, false, 18, font);
-	p_top->addElement(std::make_shared<Comment>("GEMACHT 3D"));
 
-	auto dd_settings= std::make_shared<DropDown>("Settings", 0, 3);
-	auto dd_scenes= std::make_shared<DropDown>("Scenes", 0, 2);
-	auto dd_themes= std::make_shared<DropDown>("Themes", 0, 1);
-	p_top->addElement(dd_settings);
-	p_top->addElement(dd_scenes);
-	p_top->addElement(dd_themes);
-
-	static auto dd_p_settings= std::make_shared<Panel>("dd_p_settings", (Vector2){5.63, 1}, (Vector2){4.73, 3.55}, false, 1, font);
-	dd_p_settings->addElement(std::make_shared<Button>("Overwrite", [](){}, false));
-	dd_p_settings->addElement(std::make_shared<Button>("Reset", [](){}, false));
-	dd_p_settings->addElement(std::make_shared<Button>("Discard", [](){}, false));
-	dd_p_settings->addElement(std::make_shared<Button>("Save", [](){}, false));
-	dd_settings->SetPanel(dd_p_settings);
-
-	static auto dd_p_scenes= std::make_shared<Panel>("dd_p_scenes", (Vector2){10.967, 1}, (Vector2){4.73, 1.85}, false, 1, font);
-	dd_p_scenes->addElement(std::make_shared<Button>("Scene 1", [](){}, false));
-	dd_p_scenes->addElement(std::make_shared<Button>("Scene 2", [](){}, false));
-	dd_scenes->SetPanel(dd_p_scenes);
-
-	static auto dd_p_themes= std::make_shared<Panel>("dd_p_themes", (Vector2){16.3, 1}, (Vector2){4.73, 1}, false, 1, font);
-	dd_p_themes->addElement(std::make_shared<Button>("Dark Mode", [](){}, false));
-	dd_themes->SetPanel(dd_p_themes);
-
-	swanGui.AddPanel(p_top);
 
 	Scene scene(swanGui);
 	m_scenes.push_back(scene);
