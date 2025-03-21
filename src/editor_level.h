@@ -32,7 +32,7 @@ inline auto drawSceneFunc= [](Camera3D& cam){
 		for(int y= 0; y< lvl->m_height; y++){
 			for(int z= 0; z< lvl->m_depth; z++){
 				if(lvl->m_blocks[x][y][z].m_texture_id!= 0){
-					DrawCube( (Vector3){(float)x +0.5f, (float)y +0.5f, (float)z +0.5f}, 1.0f, 1.0f, 1.0f, BLUE );
+					DrawCube( (Vector3){(float)x +0.5f, (float)y +0.5f, (float)z +0.5f}, 1.0f, 1.0f, 1.0f, (Color){221,221,221,255} );
 					DrawCubeWires( (Vector3){(float)x +0.5f, (float)y +0.5f, (float)z +0.5f}, 1.0f, 1.0f, 1.0f, BLACK );
 				}
 			}
@@ -75,13 +75,13 @@ public:
 		Vector2 p_viewportPos= {0, 1};
 		Vector2 p_viewportSize= {64, 37};
 		auto p_viewport= std::make_shared<Panel>("VIEWPORT", p_viewportPos, p_viewportSize, false, 1, font);
-		p_viewport->addElement(std::make_shared<CameraView3DFill>(viewportCamera, drawSceneFunc, ui_panel_body));
+		p_viewport->addElement(std::make_shared<CameraView3DFill>(viewportCamera, drawSceneFunc, (Color){100, 100, 100, 255} ));
 		swanGui->AddPanel(p_viewport);
 	
 		Vector2 p_previewPos= {64, 1};
 		Vector2 p_previewSize= {22, 18};
 		auto p_preview= std::make_shared<Panel>("PREVIEW", p_previewPos, p_previewSize, font);
-		p_preview->addElement(std::make_shared<CameraView3DFillBorder>(previewCamera, drawSceneFunc, ui_panel_body));
+		p_preview->addElement(std::make_shared<CameraView3DFillBorder>(previewCamera, drawSceneFunc, (Color){100, 100, 100, 255}));
 		swanGui->AddPanel(p_preview);
 
 		Vector2 p_topPos= {0, 0};
