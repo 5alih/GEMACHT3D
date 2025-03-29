@@ -1,4 +1,4 @@
-### swan game engine
+### planned game engine architecture
 ````
 game_engine/
 ├── core/
